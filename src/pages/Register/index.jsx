@@ -1,8 +1,8 @@
 import React , {useState}from 'react'
 import { Card, CardBody,Tabs,TabsHeader,TabsBody,Tab,TabPanel } from "@material-tailwind/react";
-import loginFormImage from "../../assets/login-form.png"
+import loginFormImage from "../../assets/register-form.png"
 import { FaRegUser } from "react-icons/fa";
-import formLogoImage from "../../assets/login-form-logo.png"
+import formLogoImage from "../../assets/register-form-logo.png"
 import { IoStorefrontOutline } from "react-icons/io5";
 import Form from './companents/Form'
 
@@ -14,7 +14,7 @@ const index = () => {
     return (
         <div className='w-full h-full flex flex-row '>
 
-            <div className='w-1/2 h-full flex flex-col items-center justify-center bg-dark-orange'>
+            <div className='w-1/2 h-full flex flex-col items-center justify-center bg-dark-blue'>
                     <div>
                         <img src={loginFormImage} alt="Login Form Image" />
                     </div>
@@ -28,7 +28,7 @@ const index = () => {
 
                 </div>
 
-                <h2 className='poppins-medium text-dark-gray/90 mb-8 mt-12 text-[17px]'>Resbula Hoşgeldiniz. Hesabınıza Giriş Yapın</h2>
+                <h2 className='poppins-medium text-dark-gray/90 mb-8 mt-12 text-[17px]'>Resbula Hoşgeldiniz. Hemen Kayıt Olun</h2>
 
                 
                 <Card className="w-full max-w-[35rem] shadow-none border border-ligth-gray/20 h-3/5">
@@ -36,8 +36,8 @@ const index = () => {
                     <CardBody className='h-full'>
                         <Tabs value={type} className="overflow-visible h-full">
                             <TabsHeader className="relative z-0 py-2 bg-ligth-gray/10 border-[1px] border-ligth-gray/20">
-                                <Tab value="customer" className='py-2 poppins-medium text-[15px] text-dark-gray '  onClick={() => setType("customer")}> <FaRegUser className='inline mr-4' size={21}/> Müşteri Giriş  </Tab>
-                                <Tab value="company" className='py-2 poppins-medium text-[15px] text-dark-gray' onClick={() => setType("company")}> <IoStorefrontOutline className='inline mr-4' size={22}/> İşletme Giriş </Tab>
+                                <Tab value="customer" className='py-2 poppins-medium text-[15px] text-dark-gray '  onClick={() => setType("customer")}> <FaRegUser className='inline mr-4' size={21}/> Müşteri Kayıt  </Tab>
+                                <Tab value="company" className='py-2 poppins-medium text-[15px] text-dark-gray' onClick={() => setType("company")}> <IoStorefrontOutline className='inline mr-4' size={22}/> İşletme Kayıt </Tab>
                             </TabsHeader>
                             <TabsBody className="!overflow-x-hidden !overflow-y-visible h-full" animate={{
                                 initial: {
@@ -52,10 +52,10 @@ const index = () => {
                                 }}
                             >
                                 <TabPanel value="customer" className="h-full px-0">
-                                    <Form table={"CUSTOMERS"}/>
+                                    <Form type={"customer"}/>
                                 </TabPanel>
                                 <TabPanel value="company" className="px-0 h-full">
-                                    <Form table={"COMPANIES"}/>
+                                    <Form type={"company"}/>
                                 </TabPanel>
                             </TabsBody>
                         </Tabs>
@@ -68,3 +68,6 @@ const index = () => {
 }
 
 export default index
+
+
+
