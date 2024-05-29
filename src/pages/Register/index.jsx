@@ -1,4 +1,4 @@
-import React , {useState}from 'react'
+import React , {memo, useState}from 'react'
 import { Card, CardBody,Tabs,TabsHeader,TabsBody,Tab,TabPanel } from "@material-tailwind/react";
 import loginFormImage from "../../assets/register-form.png"
 import { FaRegUser } from "react-icons/fa";
@@ -31,7 +31,7 @@ const index = () => {
                 <h2 className='poppins-medium text-dark-gray/90 mb-8 mt-12 text-[17px]'>Resbula Hoşgeldiniz. Hemen Kayıt Olun</h2>
 
                 
-                <Card className="w-full max-w-[35rem] shadow-none border border-ligth-gray/20 h-3/5">
+                <Card className="w-full max-w-[35rem] shadow-none border border-ligth-gray/20 h-max">
             
                     <CardBody className='h-full'>
                         <Tabs value={type} className="overflow-visible h-full">
@@ -52,10 +52,10 @@ const index = () => {
                                 }}
                             >
                                 <TabPanel value="customer" className="h-full px-0">
-                                    <Form type={"customer"}/>
+                                    <Form isAdmin={0}/>
                                 </TabPanel>
                                 <TabPanel value="company" className="px-0 h-full">
-                                    <Form type={"company"}/>
+                                    <Form isAdmin={1}/>
                                 </TabPanel>
                             </TabsBody>
                         </Tabs>
@@ -67,7 +67,7 @@ const index = () => {
     )
 }
 
-export default index
+export default memo(index)
 
 
 

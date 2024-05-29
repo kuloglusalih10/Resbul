@@ -28,10 +28,10 @@ const index = () => {
 
                 </div>
 
-                <h2 className='poppins-medium text-dark-gray/90 mb-8 mt-12 text-[17px]'>Resbula Hoşgeldiniz. Hesabınıza Giriş Yapın</h2>
+                <h2 className='poppins-medium text-dark-gray/90 mb-8 mt-12 text-[17px] text-center'>Resbula Hoşgeldiniz. Hesabınıza Giriş Yapın</h2>
 
                 
-                <Card className="w-full max-w-[35rem] shadow-none border border-ligth-gray/20 h-3/5">
+                <Card className="w-full max-w-[35rem] shadow-none border border-ligth-gray/20 min-h-max">
             
                     <CardBody className='h-full'>
                         <Tabs value={type} className="overflow-visible h-full">
@@ -52,10 +52,10 @@ const index = () => {
                                 }}
                             >
                                 <TabPanel value="customer" className="h-full px-0">
-                                    <Form table={"CUSTOMERS"}/>
+                                    <Form isAdmin={0}/>
                                 </TabPanel>
                                 <TabPanel value="company" className="px-0 h-full">
-                                    <Form table={"COMPANIES"}/>
+                                    <Form isAdmin={1}/>
                                 </TabPanel>
                             </TabsBody>
                         </Tabs>
