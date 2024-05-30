@@ -1,33 +1,27 @@
-import React, {useState,useEffect} from 'react'
+import React, {useState} from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import { FiEye,FiEyeOff } from "react-icons/fi";import { useFormik } from 'formik';
 import { registerSchema } from '../../../validations';
-import { isRegister,status } from '../../../stores/auth/hooks';
-import { register } from '../../../stores/auth/actions';
 import classNames from 'classnames';
 import { useGoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import register from '../../../services/auth/resgister';
+import { Dialog } from '@material-tailwind/react';
+import { ScaleLoader } from 'react-spinners';
 
 const Form = ({isAdmin}) => {
 
     const [isHidden, setisHidden] = useState(true);
     const navigate = useNavigate();
-
-    let _isRegister = isRegister();
-    let _registerStatus = status();
-    
-    useEffect(()=> {
-
-        if(_isRegister && _registerStatus == 'fulFilled'){
-            navigate('/login',{replace: true})
-        }
-    },[_isRegister]);
+    const [loader, setLoader] = useState(false);
 
     const handleGoogleRegister = useGoogleLogin({
 
         onSuccess: (result) => {
+
+            setLoader(true);
             axios
             .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${result.access_token}`, {
                 headers: {
@@ -37,7 +31,6 @@ const Form = ({isAdmin}) => {
             })
             .then((res) => {
 
-                console.log(res);
 
                 let newsUser = {
 
@@ -49,10 +42,28 @@ const Form = ({isAdmin}) => {
                     'isGoogle' :1
                 };
 
-                register(newsUser);
+                register(newsUser).then((_res)=>{
+
+                    setLoader(false);
+
+                    if(_res.res){
+
+                        toast(_res.message, {type: 'success'});
+                        navigate('/login',{replace: true});
+                    }
+                    else{
+                        toast(_res.message, {type: 'error'});
+                    }
+                }).catch((err)=> {
+                    setLoader(false);
+                    toast(err.message, {type:  'error'})
+                });
 
             })
-            .catch((err) => toast(err.message, {type: 'error'}));
+            .catch((err) => {
+                setLoader(false);
+                toast(err.message, {type: 'error'})
+            });
         },
 
         onError: () => toast('Kayıt yapılamadı', {type: 'error'})
@@ -69,17 +80,37 @@ const Form = ({isAdmin}) => {
         },
 
         validationSchema: registerSchema,
-        onSubmit: (values)=> {
+        onSubmit: async  (values)=> {
+
             values['isAdmin'] = isAdmin;
             values['isGoogle'] = 0;
-            register(values);
+            setLoader(true);
+
+            const result = await register(values);
+
+            setLoader(false);
+
+            if(result.res){
+
+                toast(result.message, {type : 'success'})
+                navigate('/login', {replace: true})
+            }
+            else{
+                toast(result.message, {type : 'error'})
+            }
+
         }
 
     });
 
+
     return (
 
         <>
+
+            <Dialog style={{background: 'none', display:'flex', alignItems:'center', justifyContent: 'center', outline: 'none', border: 'none', boxShadow: 'none'}} open={loader}>
+                <ScaleLoader className='' color='white'  />
+            </Dialog>
             <form className='flex items-center flex-col justify-center h-[80%]' onSubmit={handleSubmit}>
                 <div className='flex flex-row items-center w-full gap-x-4 justify-center'>
 
@@ -111,7 +142,7 @@ const Form = ({isAdmin}) => {
                 
                 {errors.password && touched.password ? ( <div className='text-dark-red w-full text-[13px]'>{errors.password}</div>) : null}
                 
-                <button className={classNames('mt-12 select-none hover:bg-dark-blue/[90%] bg-dark-blue outline-none rounded-md cursor-pointer py-2.5 w-full poppins-semibold  text-white', {'bg-dark-blue/80': _registerStatus == 'pending'})}  type="submit">{_registerStatus == 'pending' ? "Yükleniyor": "Kaydol"}</button>
+                <button className={classNames('mt-12 select-none hover:bg-dark-blue/[90%] bg-dark-blue outline-none rounded-md cursor-pointer py-2.5 w-full poppins-semibold  text-white')}  type="submit">Kaydol</button>
                 <div className='w-full mt-8 h-[35px] flex flex-row items-center justify-center'>
 
                     <div className='h-[1px] my-auto bg-ligth-gray/20 flex-1 mt-4'/>

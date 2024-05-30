@@ -1,10 +1,8 @@
-import React, {useState,memo, useEffect, useCallback, useMemo} from 'react'
+import React, {useState,memo} from 'react'
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import { FiEye,FiEyeOff } from "react-icons/fi";import { useFormik } from 'formik';
 import { loginSchema } from '../../../validations';
-import { login,resetPassword } from '../../../stores/auth/actions';
-import { isLogin,status } from '../../../stores/auth/hooks';
 import classNames from 'classnames';
 import { Dialog } from '@material-tailwind/react';
 import { MdOutgoingMail } from "react-icons/md";
@@ -12,33 +10,35 @@ import { validateEmail } from '../../../hooks/validate-email';
 import { useGoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import login from '../../../services/auth/login';
+import resetPassword from '../../../services/auth/reset-password';
+import {ScaleLoader} from "react-spinners";
 
 const Form =  ({isAdmin}) => {
 
     const [isHidden, setisHidden] = useState(true);
     const [openModal, setopenModal] = useState(false);
     const [resetMail, setResetMail] = useState('');
-    const [mailMessage, setMailMessage] = useState(false)
+    const [mailMessage, setMailMessage] = useState(false);
+    const [loader, setLoader] = useState(false);
 
     const navigate = useNavigate();
-
-    let _isLogin = isLogin();
-    let _loginStatus = status();
     
-     useMemo(()=> {
-
-         if(_isLogin && _loginStatus == 'fulFilled'){
-             {isAdmin == 0 ? navigate('/customer',{replace: true}) : navigate('/admin', {replace: true})}
-        }
-     },[_isLogin, _loginStatus]);
-
-    const handleResetPass = () => {
+    const handleResetPass = async () => {
 
         if(validateEmail(resetMail)){
 
             setMailMessage(false);
             setopenModal(false);
-            resetPassword(resetMail);
+
+            const result = await resetPassword(resetMail);
+
+            if(result.res){
+                toast(result.message,{'type': 'success'})
+            }
+            else{
+                toast(result.message,{'type': 'error'})
+            }
 
             
         }else{
@@ -50,6 +50,9 @@ const Form =  ({isAdmin}) => {
 
     
         onSuccess: (result) => {
+
+            setLoader(true);
+
             axios
             .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${result.access_token}`, {
                 headers: {
@@ -59,7 +62,6 @@ const Form =  ({isAdmin}) => {
             })
             .then((res) => {
 
-                console.log(res);
                 let loginUser = {
                     'email' : res['data']['email'],
                     'password' : Math.random().toString(10).substr(2),  // Google girişleri şifresiz şekilde doğrulandı
@@ -67,13 +69,31 @@ const Form =  ({isAdmin}) => {
                     'isGoogle' : 1
                 };
 
-                login(loginUser);
+                login(loginUser).then((_res)=>{
+
+                    setLoader(false);
+                    
+                    if(_res.res){
+
+                        toast(_res.message,{type: 'success'});
+                        {isAdmin == 0 ? navigate('/customer',{replace: true}) : navigate('/admin', {replace: true})}
+                    }
+                    else {
+                        toast(_res.message,{type: 'error'});
+                    }
+                }).catch((err)=> toast(err.message, {type:  'error'}));
 
             })
-            .catch((err) => toast(err.message, {type: 'error'}));
+            .catch((err) => {
+                setLoader(false);
+                toast(err.message, {type: 'error'})
+            });
         },
 
-        onError: () => toast('Giriş yapılamadı', {type: 'error'})
+        onError: () => {
+            setLoader(false);
+            toast('Giriş yapılamadı', {type: 'error'})
+        }
     })
 
 
@@ -84,17 +104,36 @@ const Form =  ({isAdmin}) => {
             password: '',
         },
         validationSchema: loginSchema,
-        onSubmit:  (values)=> {
+        onSubmit: async  (values)=> {
+
             values['isAdmin'] = isAdmin;
             values['isGoogle'] = 0;
-            login(values);
+            setLoader(true);
+
+            const result = await login(values);
+            setLoader(false);
+
+            if(result.res){
+
+                toast(result.message,{type: 'success'});
+                {isAdmin == 0 ? navigate('/customer',{replace: true}) : navigate('/admin', {replace: true})}
+            }
+            else {
+                toast(result.message,{type: 'error'});
+            }
         }
 
     });
 
     return (
         <>
+
+            <Dialog style={{background: 'none', display:'flex', alignItems:'center', justifyContent: 'center', outline: 'none', border: 'none', boxShadow: 'none'}} open={loader}>
+                <ScaleLoader className='' color='white'  />
+            </Dialog>
+        
             <form className='flex items-center flex-col justify-center h-[80%]' onSubmit={handleSubmit}>
+
            
                 <Dialog  style={{zIndex: 100}} open={openModal} >
                     <div className='border border-ligth-gray/20 bg-main rounded-md p-5 flex items-start w-full justify-center flex-col'>
@@ -136,7 +175,7 @@ const Form =  ({isAdmin}) => {
                     <p className=' text-[14px] text-dark-orange cursor-pointer' onClick={()=> setopenModal(true)}>Şifreni mi unuttun ?</p>
                 </div>
                 
-                <button className={classNames('mt-6 select-none hover:bg-dark-orange/[95%] bg-dark-orange outline-none rounded-md cursor-pointer py-2.5 w-full poppins-semibold  text-white', {'bg-dark-orange/10': _loginStatus == 'pending'})}  type="submit">{_loginStatus == 'pending' ? "Yükleniyor": "Giriş Yap"}</button>
+                <button className={classNames('mt-6 select-none hover:bg-dark-orange/[95%] bg-dark-orange outline-none rounded-md cursor-pointer py-2.5 w-full poppins-semibold  text-white')}  type="submit">Giriş Yap</button>
                 <div className='w-full mt-8 h-[35px] flex flex-row items-center justify-center'>
 
                     <div className='h-[1px] my-auto bg-ligth-gray/20 flex-1 mt-4'/>
@@ -156,7 +195,6 @@ const Form =  ({isAdmin}) => {
             
             </div>
         </> 
-        
     )
 }
 
