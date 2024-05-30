@@ -8,6 +8,8 @@ import CustomerLayout from "../layouts/Customer"
 import CustomerHome from "../pages/Customer/Home"
 import AdminLayout from "../layouts/Admin"
 import AdminHome from "../pages/Admin/Home"
+import PrivateRoute from "../companents/PrivateRoute"
+import AdminProfile from "../pages/Admin/Profile"
 
 const routes = createBrowserRouter([
     {
@@ -30,7 +32,11 @@ const routes = createBrowserRouter([
             {
                 
                 path: '/customer',
-                element: <CustomerLayout/>,
+                element: (
+                    <PrivateRoute>
+                        <CustomerLayout/>
+                    </PrivateRoute>
+                ),
                 children: [
                     {
                         index: true,
@@ -40,11 +46,19 @@ const routes = createBrowserRouter([
             },
             {
                 path: '/admin',
-                element: <AdminLayout/>,
+                element:(
+                    <PrivateRoute>
+                        <AdminLayout/>
+                    </PrivateRoute>
+                ),
                 children: [
                     {
                         index: true,
-                        element : <AdminHome/>
+                        element : <AdminHome/>,
+                    },
+                    {
+                        path: '/admin/profile',
+                        element: <AdminProfile/>
                     }
                 ]
             },

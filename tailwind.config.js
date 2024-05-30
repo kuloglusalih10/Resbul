@@ -20,7 +20,7 @@ export default {
         'dark-blue' : '#32ACFF',
         'ligth-orange' : '#FDA574',  // %60
         'dark-orange' : '#FC6F20',
-        'light-purple' : '#DDE2FF',  // %62
+        'ligth-purple' : '#DDE2FF',  // %62
         'dark-purple' : '#0025FB',
         'ligth-green' : '#9BF09D', // %10
         'middle-green' : '#A2F69B',

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.ck-editor__editable {
+  min-height: 200px;
+}
+
 
 .roboto-thin {
   font-family: "Roboto", sans-serif;

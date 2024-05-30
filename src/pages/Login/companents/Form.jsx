@@ -13,6 +13,7 @@ import axios from 'axios';
 import login from '../../../services/auth/login';
 import resetPassword from '../../../services/auth/reset-password';
 import {ScaleLoader} from "react-spinners";
+import { setLogin, setUser } from '../../../stores/auth/actions';
 
 const Form =  ({isAdmin}) => {
 
@@ -75,8 +76,10 @@ const Form =  ({isAdmin}) => {
                     
                     if(_res.res){
 
+                        setLogin(true);
+                        setUser(_res.data);
                         toast(_res.message,{type: 'success'});
-                        {isAdmin == 0 ? navigate('/customer',{replace: true}) : navigate('/admin', {replace: true})}
+                        {isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
                     }
                     else {
                         toast(_res.message,{type: 'error'});
@@ -112,11 +115,16 @@ const Form =  ({isAdmin}) => {
 
             const result = await login(values);
             setLoader(false);
+            console.log(result);
 
             if(result.res){
 
+                setLogin(true);
+                console.log('normal giriş  set user data : ', result.data);
+                setUser(result.data);
+
                 toast(result.message,{type: 'success'});
-                {isAdmin == 0 ? navigate('/customer',{replace: true}) : navigate('/admin', {replace: true})}
+                {isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
             }
             else {
                 toast(result.message,{type: 'error'});
