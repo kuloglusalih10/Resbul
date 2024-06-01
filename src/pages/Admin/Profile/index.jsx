@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { htmlToText } from 'html-to-text';
+import updateAdminProfile from "../../../services/auth/update-admin-profile";
 
 const index = () => {
  
@@ -29,7 +30,74 @@ const index = () => {
     const [logoutModal, setLogoutModal] = useState(false);
     const navigate = useNavigate();
 
-    console.log(user);
+    const [profile, setProfile] = useState(null);
+    const [background, setBackground] = useState(null);
+    const [displayProfile, setDisplayProfile] = useState(null);
+    const [displayBack, setDisplayBack] = useState(null);
+
+
+
+
+    const onProfileChange = (event) => {
+     
+        if (event["target"]["files"] && event["target"]["files"][0]) {
+
+
+            let file =  event['target']['files'][0];
+       
+            setProfile(file);
+            setDisplayProfile(URL.createObjectURL(file));
+   
+           }
+     
+    }
+
+    const onBackgroundChange = (event) => {
+       
+        if (event["target"]["files"] && event["target"]["files"][0]) {
+
+
+         let file =  event['target']['files'][0];
+    
+         setBackground(file);
+         setDisplayBack(URL.createObjectURL(file));
+
+        }
+
+
+    }
+
+
+    const handleSave = async () => {
+
+
+        const values = {
+            'id' : user['id'],
+            'name' : name,
+            'surname' : surname,
+            'description' : description,
+            'profile' : profile,
+            'background' : background
+        }
+
+        console.log(values);
+        
+        const result = await updateAdminProfile(values);
+
+        console.log(result);
+        
+        if(result.res){
+            localStorage.setItem('user', JSON.stringify(result['data']));
+            toast(result.message,{'type': 'success'})
+        }
+        else{
+            toast(result.message,{'type': 'error'});
+            if(!result.isLogged){
+                navigate('/login');
+                setLogout();
+            }
+        }
+    }
 
     const handleResetPass = async (resetMail) => {
 
@@ -56,10 +124,15 @@ const index = () => {
         const result = await logout();
 
         if(result.res){
+            try{
 
-            setLogout();
-            toast(result.message,{'type': 'success'});
-            navigate('/login');
+                setLogout();
+                toast(result.message,{'type': 'success'});
+                navigate('/login');
+            }
+            catch(e){
+                console.log(e);
+            }
             
         }
         else{
@@ -114,34 +187,28 @@ const index = () => {
 
                     <div className='w-full rounded-lg h-2/5 relative'>
 
-                        <button className='p-2 rounded-full absolute bottom-4 right-4 flex items-center justify-center bg-dark-orange'>
+                        <button onClick={()=>{document.getElementById('background_input').click();}}  className='p-2 rounded-full absolute bottom-4 right-4 flex items-center justify-center bg-dark-orange'>
 
                             <FaEdit size={15} className='' color='#fff'/>
+                            <input id='background_input' className='hidden'  type="file"  onChange={onBackgroundChange} />
 
                         </button>
-                        <img className='w-full h-full object-cover rounded-t-lg' src="https://t4.ftcdn.net/jpg/05/71/83/47/360_F_571834789_ujYbUnH190iUokdDhZq7GXeTBRgqYVwa.jpg" alt="profile background" />
-
+                        <img className='w-full h-full object-cover rounded-t-lg' src={displayBack ?? import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+user['background']}  alt="profile background" />
+                        
                     </div>
                     <div className='h-3/5 w-full flex flex-row  items-end '>
 
                         <div className='w-[30%] h-[207px] flex flex-col items-end justify-center relative'>
 
                            
-                           <button className='absolute z-50 top-24 left-[75%] rounded-full bg-dark-orange p-2'>
+                           <button onClick={()=>{document.getElementById('profil_input').click();}} className='absolute z-50 top-24 left-[75%] rounded-full bg-dark-orange p-2'>
                                 <FaEdit className='' color='#fff'/>
-
+                                <input className='hidden' id='profil_input'  type="file" onChange={onProfileChange}/>
                            </button>
                                 
                             <div className='w-[80%] select-none h-full absolute -top-1/3 left-[30px]  border rounded-lg overflow-hidden'>
-
-                                    
-                                    <img className='w-full  h-full object-contain bg-white' src={user['image']} alt="Admin profile image" >
-
-                                    </img>
-                                
+                                    <img className='w-full  h-full object-contain bg-white' src={displayProfile ?? profile ?? import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+user['profile']}  alt="Admin profile image" />
                             </div>
-                            
-
                             
 
                             <h2 className='bottom-4 w-full select-none flex items-center justify-center absolute  poppins-medium text-dark-gray/70 text-[20px]'>
@@ -157,7 +224,7 @@ const index = () => {
                                 <textarea  className='w-full resize-none outline-none h-full' value={description} name="" id="" ></textarea>
 
                             </div>
-                            <div className='h-[20%] flex justify-end'>
+                            <div  className='h-[20%] flex justify-end'>
                                 <button onClick={()=> setLogoutModal(true)} className='w-[130px] h-full bg-dark-red/90 rounded-md text-white'> Çıkış Yap</button>
 
                             </div>
@@ -240,13 +307,13 @@ const index = () => {
 
                     <div className='w-full flex-1 px-2 flex items-center justify-between'>
                         <button onClick={()=> setOpenModal(true)} className=' pl-2 text-dark-blue text-[12px]'>Şifre Sıfırla ?</button>
-                        <button className='border border-dark-orange bg-ligth-orange/20 rounded-md py-2 px-12'>
+                        <button onClick={()=> handleSave()}  className={classNames('border border-dark-orange bg-ligth-orange/20 rounded-md py-2 px-12', {'bg-ligth-gray/30 pointer-events-none  border-ligth-gray':(user['name'].toLowerCase() == name.toLowerCase() && user['surname'].toLowerCase() == surname.toLowerCase() && user['description'].toLowerCase() == description.toLowerCase() && displayBack  == null && displayProfile == null)})}>
                             Kaydet
                         </button>
                     </div>
                 </div>
                 
-            </div>
+            </div> 
             <div className='w-full h-max mt-10 '>
                 <CKEditor 
 

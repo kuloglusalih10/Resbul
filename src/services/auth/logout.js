@@ -16,14 +16,14 @@ const logout = async  (_data) => {
         
         
         const response  = await axios.request(config);
-        console.log(response);
+
         return (response.data);
 
         
     }
     catch(error){
 
-        toast(error.message, {type: 'error'});
+        return toast(error.message, {type: 'error'});
     }
 
 }

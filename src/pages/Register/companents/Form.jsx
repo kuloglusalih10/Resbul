@@ -90,6 +90,7 @@ const Form = ({isAdmin}) => {
 
             setLoader(false);
 
+
             if(result.res){
 
                 toast(result.message, {type : 'success'})

@@ -4,6 +4,7 @@ import {toast} from "react-toastify"
 const register = async  (_data) => {
 
     try{
+        //axios.defaults.withCredentials = true;
 
         let data = JSON.stringify({
             "name" : _data['name'],

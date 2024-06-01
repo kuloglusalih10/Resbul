@@ -6,7 +6,7 @@ const index = () => {
     <div className='bg-main w-full h-full'>
         
         <Navbar/>
-        <div className='px-[200px] w-full flex-1'>
+        <div className='xl:px-[200px] px-[10px] w-full flex-1'>
           <Outlet/>
         </div>
 

@@ -4,6 +4,8 @@ import {toast} from "react-toastify"
 const resetPassword = async (_data) => {
     try{
 
+        //axios.defaults.withCredentials = true;
+
         let data = JSON.stringify({
             "email": _data,
         });
@@ -13,6 +15,7 @@ const resetPassword = async (_data) => {
             url: `${import.meta.env.VITE_API_URL}/send-reset-mail.php`,
             headers:{
                 'Content-Type': 'application/json', 
+               
             },
             data : data
         };

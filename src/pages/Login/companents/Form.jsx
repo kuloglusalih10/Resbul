@@ -114,6 +114,7 @@ const Form =  ({isAdmin}) => {
             setLoader(true);
 
             const result = await login(values);
+            
             setLoader(false);
             console.log(result);
 

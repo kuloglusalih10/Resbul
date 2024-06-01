@@ -29,6 +29,7 @@
     "react-router-dom": "^6.23.1",
     "react-spinners": "^0.13.8",
     "react-toastify": "^10.0.5",
+    "use-file-picker": "^2.1.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {

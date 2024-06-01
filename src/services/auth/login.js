@@ -2,7 +2,10 @@ import axios from "axios";
 import {toast} from "react-toastify"
 
 const login = async (_data)=> {
+
     try{
+
+        //axios.defaults.withCredentials = true;
 
         let data = JSON.stringify({
             "email": _data['email'],
