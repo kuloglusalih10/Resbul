@@ -10,6 +10,7 @@ import AdminLayout from "../layouts/Admin"
 import AdminHome from "../pages/Admin/Home"
 import PrivateRoute from "../companents/PrivateRoute"
 import AdminProfile from "../pages/Admin/Profile"
+import Add from "../pages/Admin/Add";
 
 const routes = createBrowserRouter([
     {
@@ -59,6 +60,10 @@ const routes = createBrowserRouter([
                     {
                         path: '/admin/profile',
                         element: <AdminProfile/>
+                    },
+                    {
+                        path: '/admin/add',
+                        element: <Add/>
                     }
                 ]
             },
