@@ -6,16 +6,24 @@ import { IoStorefront,IoLocation } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { BiFoodMenu } from "react-icons/bi";
 import { GrGallery } from "react-icons/gr";
-import { Checkbox } from "@material-tailwind/react";
+import { Checkbox, menu } from "@material-tailwind/react";
 import getCities from '../../../services/admin/get-cities';
 import getDistricts from '../../../services/admin/get-districts';
+import { FaBowlFood } from "react-icons/fa6";
+import { GiCakeSlice } from "react-icons/gi";
+import { RiDrinks2Fill } from "react-icons/ri";
+import { LuSalad } from "react-icons/lu";
+import { MdOutlineAddPhotoAlternate } from "react-icons/md";
+import { IoMdAdd } from "react-icons/io";
 
 const index = () => {
 
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
 
-    const [foodError, setfoodError] = useState('');
+    const [menuError, setMenuError] = useState('');
+     
+      const [active, setActive] = useState(null);
     
 
     useEffect(()=>{
@@ -43,7 +51,7 @@ const index = () => {
             validationSchema={stepperValidation}
             initialValues={{
 
-                step: 1,
+                step: 4,
                 lastStep : 4,
 
                 // step 1
@@ -68,8 +76,12 @@ const index = () => {
 
                 menu : [],
                 food : '',
-                category: 1,
-                price: 0
+                category: '1',
+                price: 0,
+
+                // step 4 
+
+                gallery : []
 
 
             }}
@@ -133,7 +145,26 @@ const index = () => {
                         const districts = await getDistricts(city);
                         setDistricts(districts);
                         
-                    }
+                    };
+
+                     const handleGallerySelect = (e) => {
+
+                         const files = e.target.files;
+
+                          let selected_f = [];
+
+                          for (const key in files) {
+                              if(files[key] instanceof File){
+
+                                  selected_f.push(files[key]);
+
+                              }
+                          }
+
+                          setActive(URL.createObjectURL(selected_f[0]));
+                          setFieldValue('gallery', selected_f);
+
+                     }
 
                     return (
 
@@ -150,7 +181,7 @@ const index = () => {
                                                 <span className={classNames('rounded-full w-[45px] p-2 h-[45px] flex items-center justify-center',{
 
                                                     'bg-green-100 border border-dark-green': values.step >= step.step, 
-                                                    'bg-zinc-200' : values.step != step.step,
+                                                    'bg-zinc-200' : values.step < step.step,
 
 
                                                 } )}>
@@ -199,8 +230,10 @@ const index = () => {
 
                                         </div>
                                         <div>
-                                            <Field value={undefined}  placeHolder="Logo" type='file'  onChange={handleLogoChange} className="w-full rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  name='logo'/>
-                                            <ErrorMessage name='logo' component='small' className='text-sm text-red-600 mt-2 block'/>
+                                            
+                                            <button type='button' onClick={()=> {document.getElementById('logo').click()}} className='w-full mt-4 border border-dark-blue rounded-md bg-ligth-blue/20 py-3 flex flex-row items-center justify-center'><MdOutlineAddPhotoAlternate size={21} className='mr-4'/> Logo</button>
+                                            <Field value={undefined} id='logo'  placeHolder="Logo" type='file'  onChange={handleLogoChange} className="w-full hidden rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  name='logo'/>
+                                            <ErrorMessage name='logo'  component='small' className='text-sm text-red-600 mt-2 block'/>
                                         </div>
                                         <div>
                                             <Field component='textarea'  placeHolder="Açıklama"  className="w-full h-[100px] resize-none rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  name='description'/>
@@ -287,11 +320,34 @@ const index = () => {
                                             name='menu'
                                             render={(arrayHelper)=>{
 
-
-                                                
-
                                                 const handleAddFood = () => {
-                                                    console.log(values);
+
+                                                    if(values.food.length < 2){
+                                                        setMenuError('Yiyecek ismi en az 2 karakter olmalı ');
+                                                        return
+
+                                                    }else if(values.price < 1 ){
+                                                        setMenuError('Fiyat en az 1 ₺ olmalı ');
+                                                        return
+                                                    }
+                                                    else{
+                                                        let menuItem = {
+
+                                                            'food' : values.food,
+                                                            'category' : values.category,
+                                                            'price' : values.price
+
+                                                        }
+                                                        setFieldValue('menu', [...values.menu, menuItem]);
+                                                        setMenuError('');
+                                                        setFieldValue('food', '');
+                                                        setFieldValue('price', 0);
+                                                        setFieldValue('category', '1');
+
+                                                        document.getElementById('food').value='';
+                                                        document.getElementById('price').value=0;
+                                                        console.log(values.menu);
+                                                    }
                                                 }
                                                 
                                             
@@ -305,43 +361,157 @@ const index = () => {
                                                                 <img className='w-full h-full object-contain' src={URL.createObjectURL(values.logo)} alt="" />
                                                             </div> */}
 
+                                                            {
+                                                                menuError && (<p className='text-red-600 mt-2'>{menuError}</p>)
+                                                            }
+
+                                                            <div className='px-4 mt-4 w-full flex flex-col items-start'>
+
+                                                                <h2 className='text-dark-gray/80 mb-4 roboto-medium text-[17px] flex flex-row items-center '> <div className='bg-ligth-blue/20 rounded-lg mr-4 p-2 border border-dark-blue'><FaBowlFood color='#32ACFF'/> </div> Ana yemekler</h2>
+                                                                
+                                                                {
+                                                                    values.menu.map((item,index)=>{
+
+                                                                        if(item.category == '1')
+                                                                        {
+                                                                            return(
+    
+                                                                                <div className='flex w-full mb-4 flex-row items-center justify-between border-b border-ligth-gray/40'>
+    
+                                                                                    <p className='roboto-regular-italic'>{item.food}</p>
+    
+                                                                                    <h2 className='mt-4 roboto-regular text-dark-orange text-[15px]'> {item.price} ₺</h2>
+    
+                                                                                </div>
+                                                                            )
+
+                                                                        }
+                                                                    })
+                                                                }
+                                                                
+                                                                
+
+                                                                
+                                                            </div>
+                                                            <div className='px-4 mt-4 w-full flex flex-col items-start'>
+
+                                                                <h2 className='text-dark-gray/80 mb-4 roboto-medium text-[17px] flex flex-row items-center '> <div className='bg-ligth-purple/60 rounded-lg mr-4 p-2 border border-dark-purple'><GiCakeSlice color='#0025FB'/> </div> Tatlılar</h2>
+                                                                
+                                                                {
+                                                                    values.menu.map((item,index)=>{
+
+                                                                        if(item.category == '2')
+                                                                        {
+                                                                            return(
+    
+                                                                                <div className='flex w-full flex-row items-center justify-between border-b border-ligth-gray/40'>
+    
+                                                                                    <p className='roboto-regular-italic'>{item.food}</p>
+    
+                                                                                    <h2 className='mt-4 roboto-regular text-dark-orange text-[15px]'> {item.price} ₺</h2>
+    
+                                                                                </div>
+                                                                            )
+
+                                                                        }
+                                                                    })
+                                                                }
+                                                                
+                                                                
+
+                                                                
+                                                            </div>
+                                                            <div className='px-4 mt-4 w-full flex flex-col items-start'>
+
+                                                                <h2 className='text-dark-gray/80 mb-4 roboto-medium text-[17px] flex flex-row items-center '> <div className='bg-ligth-green/20 rounded-lg mr-4 p-2 border border-dark-green'><RiDrinks2Fill color='#19D508'/> </div> İçecekler</h2>
+                                                                
+                                                                {
+                                                                    values.menu.map((item,index)=>{
+
+                                                                        if(item.category == '3')
+                                                                        {
+                                                                            return(
+    
+                                                                                <div className='flex w-full flex-row items-center justify-between border-b border-ligth-gray/40'>
+    
+                                                                                    <p className='roboto-regular-italic'>{item.food}</p>
+    
+                                                                                    <h2 className='mt-4 roboto-regular text-dark-orange text-[15px]'> {item.price} ₺</h2>
+    
+                                                                                </div>
+                                                                            )
+
+                                                                        }
+                                                                    })
+                                                                }
+                                                                
+                                                                
+
+                                                                
+                                                            </div>
+                                                            <div className='px-4 mt-4 w-full flex flex-col items-start'>
+
+                                                                <h2 className='text-dark-gray/80 mb-4 roboto-medium text-[17px] flex flex-row items-center '> <div className='bg-ligth-gray/20 rounded-lg mr-4 p-2 border border-dark-gray'><LuSalad color='#1c1e23'/> </div> Aperatifler</h2>
+                                                                
+                                                                {
+                                                                    values.menu.map((item,index)=>{
+
+                                                                        if(item.category == '4')
+                                                                        {
+                                                                            return(
+    
+                                                                                <div className='flex w-full flex-row items-center justify-between border-b border-ligth-gray/40'>
+    
+                                                                                    <p className='roboto-regular-italic'>{item.food}</p>
+    
+                                                                                    <h2 className='mt-4 roboto-regular text-dark-orange text-[15px]'> {item.price} ₺</h2>
+    
+                                                                                </div>
+                                                                            )
+
+                                                                        }
+                                                                    })
+                                                                }
+                                                                
+                                                                
+
+                                                                
+                                                            </div>
+
+
                                                         </div>
 
-                                                        <div className='w-full hidden'>
-                                                            <Field  name='menu'  placeHolder="İsim"  className="w-full  resize-none rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
-                                                            <ErrorMessage name='menu' component='small' className='text-sm text-red-600 mt-2 block'/>
-                                                        </div>
+                                            
 
                                                         <div className='flex flex-col items-center justify-between'>
 
                                                             
 
                                                             <div className='w-full'>
-                                                                <Field  name='food'  placeHolder="İsim"  className="w-full  resize-none rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
-                                                                <ErrorMessage name='food' component='small' className='text-sm text-red-600 mt-2 block'/>
+                                                                <Field  name='food' id='food' onChange={handleChange}  placeHolder="İsim"  className="w-full  resize-none rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
+                                                            
                                                             </div>
                                                             <div className='w-full gap-x-2 flex items-center justify-between'>
                                                                 <div className='w-1/3'>
 
                                                                     <Field component='select' onChange={handleChange} name='category'  className="w-full mt-4 rounded border border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue" p>
                                                                         
-                                                                             <Field key={index} component='option' value={1}>Ana yemek</Field>
-                                                                             <Field key={index} component='option' value={2}>Tatlı</Field>
-                                                                             <Field key={index} component='option' value={3}>İçecek</Field>
-                                                                             <Field key={index} component='option' value={4}>Aperatif</Field>
+                                                                             <Field component='option' value={1}>Ana yemek</Field>
+                                                                             <Field  component='option' value={2}>Tatlı</Field>
+                                                                             <Field component='option' value={3}>İçecek</Field>
+                                                                             <Field  component='option' value={4}>Aperatif</Field>
 
                                                                         
                                                                     </Field>
-                                                                    <ErrorMessage name='category' component='small' className='text-sm text-red-600 mt-2 block'/>
 
                                                                 </div>
                                                                 <div className='w-1/3'>
-                                                                    <Field type='number' className="w-full resize-none rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  name='price'/>
-                                                                    <ErrorMessage name='price' component='small' className='text-sm text-red-600 mt-2 block'/>
+                                                                    <Field type='number' id='price' onChange={handleChange} className="w-full resize-none rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  name='price'/>
+                                                                    
                                                                 </div>
                                                                 <div className='w-1/3'>
-
-                                                                        <button type='button' onClick={handleAddFood} className='py-2 mt-4 w-full flex-1 bg-dark-gray/90 disabled:opacity-50 rounded-md text-white'>Ekle</button>
+                                                                        <button type='button' onClick={handleAddFood} className='w-full mt-4 border border-dark-blue rounded-md bg-ligth-blue/20 py-2 flex flex-row items-center justify-center'><IoMdAdd size={21} className='mr-2'/> Ekle</button>
+                                                                        
                                                                     
                                                                 </div>
 
@@ -364,6 +534,67 @@ const index = () => {
                                 )
                             }
 
+                            {
+                                values.step === 4 && (
+                                    <>
+                                        {
+                                            values.gallery.length < 3 ? (<>
+                                            
+                                                <div className='w-full border border-dark-blue bg-dark-blue/30 rounded-md flex flex-col items-center justify-center h-[280px]'>
+                                                    <div>
+                                                        <MdOutlineAddPhotoAlternate color='#32ACFF' size={40} />
+                                                    </div>
+                                                    <h2 className='poppins-regular-italic mt-8 text-[17px]'>
+                                                        Lütfen en az 3 en fazla 5 fotoğraf yükleyiniz
+                                                    </h2>
+                                                </div>
+                                            
+                                            </>) : (<>
+                                            
+                                            
+                                                <div className="grid gap-4">
+                                                    <div>
+                                                        <img
+                                                        className=" w-full max-w-full rounded-lg object-cover object-center h-[200px]"
+                                                        src={active}
+                                                        alt=""
+                                                        />
+                                                    </div>
+                                                    <div className="grid grid-cols-5 gap-4">
+                                                        {values.gallery.map((item, index) => (
+                                                        <div key={index}>
+                                                            <img
+                                                            onClick={() => setActive(URL.createObjectURL(item))}
+                                                            src={URL.createObjectURL(item)}
+                                                            className="h-20 max-w-full cursor-pointer rounded-lg object-cover object-center"
+                                                            alt="gallery-image"
+                                                            />
+                                                        </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            
+                                            </>)
+                                        }
+                                        <div className='w-full gap-x-4 flex items-center justify-between'>
+                                            <div className='w-full flex flex-col items-center'>
+
+                                                <button type='button' onClick={()=> {document.getElementById('gallery').click()}} className='w-full mt-4 border border-dark-orange rounded-md bg-ligth-orange/20 py-3 flex flex-row items-center justify-center'><MdOutlineAddPhotoAlternate size={21} className='mr-4'/> Galeriye ekle</button>
+
+                                                <Field multiple="multiple" value={undefined} name='gallery' id='gallery'  placeHolder="Galeri" type='file'  onChange={handleGallerySelect} className="w-full hidden rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
+                                                <ErrorMessage name='gallery' component='small' className='text-sm text-red-600 mt-2 block'/>
+                                            </div>
+                                            {/* <div className='w-[30%]'>
+                                                <button type='button' onClick={()=> console.log('okey')} className='py-2 mt-4 w-full bg-dark-gray/90 disabled:opacity-50 rounded-md text-white'>Ekle</button>
+                                            </div> */}
+
+                                        </div>
+                                        
+                                    
+                                    </>
+                                )
+                            }
+
                             <div className='w-full gap-x-24 mt-10 flex items-center justify-between'>
 
                                 {
@@ -380,7 +611,7 @@ const index = () => {
                                 {
                                     values.lastStep === values.step ?  (
 
-                                        ( <button type='submit' className='py-3 flex-1 bg-dark-gray/90 rounded-md text-white'>Kaydet</button>
+                                        ( <button type='submit' disabled={!isValid || !dirty}  className='py-3 disabled:opacity-50  flex-1 bg-dark-gray/90 rounded-md text-white'>Kaydet</button>
     )
                                         
                                         )

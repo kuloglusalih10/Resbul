@@ -6,6 +6,15 @@
   min-height: 200px;
 }
 
+input[type=number]::-webkit-inner-spin-button {
+  opacity: 1;
+  margin: 0;
+  width: 40px;
+}
+
+
+
+
 
 .roboto-thin {
   font-family: "Roboto", sans-serif;
