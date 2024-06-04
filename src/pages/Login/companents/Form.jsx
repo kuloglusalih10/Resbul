@@ -34,6 +34,8 @@ const Form =  ({isAdmin}) => {
 
             const result = await resetPassword(resetMail);
 
+            console.log(result);
+
             if(result.res){
                 toast(result.message,{'type': 'success'})
             }

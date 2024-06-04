@@ -15,11 +15,17 @@ import { RiDrinks2Fill } from "react-icons/ri";
 import { LuSalad } from "react-icons/lu";
 import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import addCompany from '../../../services/admin/add-new-company';
+import { useAuth } from '../../../stores/auth/hooks';
+import { toast } from 'react-toastify';
 
 const index = () => {
 
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
+    const [parent, enableAnimations] = useAutoAnimate();
+    const user = JSON.parse(useAuth());
 
     const [menuError, setMenuError] = useState('');
      
@@ -51,7 +57,7 @@ const index = () => {
             validationSchema={stepperValidation}
             initialValues={{
 
-                step: 4,
+                step: 1,
                 lastStep : 4,
 
                 // step 1
@@ -86,8 +92,22 @@ const index = () => {
 
             }}
 
-            onSubmit={(values, actions)=> {
-                console.log(values);
+            onSubmit={async (values, actions)=> {
+
+                const result = await addCompany(values, user['id']);
+
+                
+
+                if(result.res){
+
+                    toast(result.message, {type : 'success'});
+
+                }else{
+
+                    toast(result.message, {type : 'error'});
+
+                }
+
             }}
 
         
@@ -95,7 +115,7 @@ const index = () => {
             
 
             {
-                ({values, setFieldValue, isValid, dirty, handleChange, setTouched, setFieldError}) => {
+                ({values, setFieldValue, isValid, dirty, handleChange, setFieldTouched}) => {
 
                     const steps =  [
 
@@ -136,7 +156,9 @@ const index = () => {
                     }
 
                     const handleLogoChange = (e) => {
+                        setFieldTouched('logo', true);
                         setFieldValue('logo', e.target.files[0]);
+                        
                     };
 
                     const onCityChange = async (city) => {
@@ -161,6 +183,7 @@ const index = () => {
                               }
                           }
 
+                          setFieldTouched('gallery', true);
                           setActive(URL.createObjectURL(selected_f[0]));
                           setFieldValue('gallery', selected_f);
 
@@ -168,7 +191,7 @@ const index = () => {
 
                     return (
 
-                        <Form className='w-full md:w-[60%] bg-white border border-ligth-gray/20 rounded-md p-10'>
+                        <Form ref={parent} className='w-full md:w-[60%] bg-white border border-ligth-gray/20 rounded-md p-10'>
 
 
                             <header className='mb-4 px-4 w-full border border-ligth-gray/20 bg-main rounded-md flex h-[120px] items-center justify-around'>
@@ -232,7 +255,7 @@ const index = () => {
                                         <div>
                                             
                                             <button type='button' onClick={()=> {document.getElementById('logo').click()}} className='w-full mt-4 border border-dark-blue rounded-md bg-ligth-blue/20 py-3 flex flex-row items-center justify-center'><MdOutlineAddPhotoAlternate size={21} className='mr-4'/> Logo</button>
-                                            <Field value={undefined} id='logo'  placeHolder="Logo" type='file'  onChange={handleLogoChange} className="w-full hidden rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  name='logo'/>
+                                            <Field value={undefined} id='logo' name='logo'  placeHolder="Logo" type='file'  onChange={handleLogoChange} className="w-full hidden rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
                                             <ErrorMessage name='logo'  component='small' className='text-sm text-red-600 mt-2 block'/>
                                         </div>
                                         <div>
@@ -316,7 +339,6 @@ const index = () => {
                                     <>
                                         <FieldArray
                                         
-                                        
                                             name='menu'
                                             render={(arrayHelper)=>{
 
@@ -357,9 +379,9 @@ const index = () => {
 
                                                         <div className='w-full h-[300px] border border-ligth-gray/20 rounded-md flex flex-col items-center overflow-scroll'>
 
-                                                            {/* <div className='w-[40%] h-[20%] mt-4'>
+                                                            <div className='w-[40%] h-[20%] mt-4'>
                                                                 <img className='w-full h-full object-contain' src={URL.createObjectURL(values.logo)} alt="" />
-                                                            </div> */}
+                                                            </div>
 
                                                             {
                                                                 menuError && (<p className='text-red-600 mt-2'>{menuError}</p>)
@@ -528,8 +550,6 @@ const index = () => {
                                         
                                         />
 
-                                        
-
                                     </>
                                 )
                             }
@@ -584,9 +604,6 @@ const index = () => {
                                                 <Field multiple="multiple" value={undefined} name='gallery' id='gallery'  placeHolder="Galeri" type='file'  onChange={handleGallerySelect} className="w-full hidden rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
                                                 <ErrorMessage name='gallery' component='small' className='text-sm text-red-600 mt-2 block'/>
                                             </div>
-                                            {/* <div className='w-[30%]'>
-                                                <button type='button' onClick={()=> console.log('okey')} className='py-2 mt-4 w-full bg-dark-gray/90 disabled:opacity-50 rounded-md text-white'>Ekle</button>
-                                            </div> */}
 
                                         </div>
                                         

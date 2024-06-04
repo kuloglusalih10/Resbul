@@ -18,7 +18,7 @@ export const stepperValidation = Yup.object().shape({
     logo : Yup.mixed().test('fileFormat', 'Geçersiz dosya uzantısı', value => {
 
         if (value) {
-            const supportedFormats = ["png","PNG"];
+            const supportedFormats = ["jpg","jpeg","png","JPG", "JPEG", "PNG"];
             return supportedFormats.includes(value.name.split('.').pop());
         }
         return true;
@@ -26,7 +26,9 @@ export const stepperValidation = Yup.object().shape({
       }).test('fileSize', 'Dosya boyutu en fazle 5 mb olabilir', value => {
 
         if (value) {
-          return value.size <= 5145728;
+
+          return value.size <= 5245728;
+          
         }
         return true;
 
