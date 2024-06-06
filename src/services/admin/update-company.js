@@ -1,7 +1,7 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const addCompany = async  (_data, user_id) => {
+const updateCompany = async  (_data, user_id,address_id,company_id,menu_id) => {
 
     try{
 
@@ -22,17 +22,31 @@ const addCompany = async  (_data, user_id) => {
         formData.append('district', _data['district']);
         formData.append('adressDesc', _data['adressDesc']);
         formData.append('menu', JSON.stringify(_data['menu']));
+        formData.append('address_id', address_id);
+        formData.append('company_id', company_id);
+        formData.append('menu_id', menu_id);
+
 
         
 
-        for(let i =0; i < _data['gallery'].length; i++){
+        if(_data['gallery'] == null){
 
-            formData.append('gallery[]', _data['gallery'][i]);
+            formData.append('gallery', null);
+
         }
+        else{
+
+            for(let i =0; i < _data['gallery'].length; i++){
+    
+                formData.append('gallery[]', _data['gallery'][i]);
+            }
+
+        }
+
 
         let config = {
              method: 'POST',
-             url: `${import.meta.env.VITE_API_URL}/create-new-company.php`, 
+             url: `${import.meta.env.VITE_API_URL}/update-company.php`, 
              data : formData
          };
         
@@ -52,4 +66,4 @@ const addCompany = async  (_data, user_id) => {
 }
 
 
-export default addCompany;
+export default updateCompany;

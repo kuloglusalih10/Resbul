@@ -14,6 +14,7 @@ import AdminList from "../pages/Admin/List"
 import AdminControl from "../companents/AdminControl"
 import CustomerControl from "../companents/CustomerControl"
 import Detail from "../pages/Admin/Detail"
+import EditPage from "../pages/Admin/Edit"
 
 const routes = createBrowserRouter([
     {
@@ -76,6 +77,10 @@ const routes = createBrowserRouter([
                     {
                         path: '/admin/:id',
                         element: <Detail/>
+                    },
+                    {
+                        path: '/admin/:id/edit',
+                        element: <EditPage/>
                     }
                     
                 ]

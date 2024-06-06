@@ -6,7 +6,7 @@ import { IoStorefront,IoLocation } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { BiFoodMenu } from "react-icons/bi";
 import { GrGallery } from "react-icons/gr";
-import { Checkbox, menu } from "@material-tailwind/react";
+import { Checkbox } from "@material-tailwind/react";
 import getCities from '../../../services/admin/get-cities';
 import getDistricts from '../../../services/admin/get-districts';
 import { FaBowlFood } from "react-icons/fa6";
@@ -33,7 +33,7 @@ const index = () => {
 
     const [menuError, setMenuError] = useState('');
      
-      const [active, setActive] = useState(null);
+    const [active, setActive] = useState(null);
     
 
     useEffect(()=>{
@@ -373,7 +373,6 @@ const index = () => {
 
                                                         document.getElementById('food').value='';
                                                         document.getElementById('price').value=0;
-                                                        console.log(values.menu);
                                                     }
                                                 }
                                                 
@@ -534,8 +533,6 @@ const index = () => {
                                                                 </div>
                                                                 <div className='w-1/3'>
                                                                         <button type='button' onClick={handleAddFood} className='w-full mt-4 border border-dark-blue rounded-md bg-ligth-blue/20 py-2 flex flex-row items-center justify-center'><IoMdAdd size={21} className='mr-2'/> Ekle</button>
-                                                                        
-                                                                    
                                                                 </div>
 
                                                             </div>
@@ -601,7 +598,7 @@ const index = () => {
                                             <div className='w-full flex flex-col items-center'>
 
                                                 <button type='button' onClick={()=> {document.getElementById('gallery').click()}} className='w-full mt-4 border border-dark-orange rounded-md bg-ligth-orange/20 py-3 flex flex-row items-center justify-center'><MdOutlineAddPhotoAlternate size={21} className='mr-4'/> Galeriye ekle</button>
-
+ 
                                                 <Field multiple="multiple" value={undefined} name='gallery' id='gallery'  placeHolder="Galeri" type='file'  onChange={handleGallerySelect} className="w-full hidden rounded border mt-4 border-ligth-gray/20 py-2 px-4 outline-none focus:border-dark-blue"  />
                                                 <ErrorMessage name='gallery' component='small' className='text-sm text-red-600 mt-2 block'/>
                                             </div>

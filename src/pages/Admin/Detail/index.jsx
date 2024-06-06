@@ -86,7 +86,7 @@ const index = () => {
     
 
     return (
-       <div className='w-full h-max  px-8 md:px-52 pt-24 flex flex-col items-center justify-center'>
+       <div className='w-full h-max  px-8 md:px-52 pt-16 flex flex-col items-center justify-center'>
             {
                 isLoading ? 
 
@@ -383,7 +383,7 @@ const index = () => {
 
                                 <div className='w-full flex items-center justify-end gap-x-4 mt-4'>
 
-                                    <button onClick={()=> console.log('Düzenle')} className='w-max py-2 px-16 h-full bg-zinc-100 roboto-regular border border-ligth-gray/20 text-black rounded-md '> Düzenle</button>
+                                    <button onClick={()=> navigate('edit')} className='w-max py-2 px-16 h-full bg-zinc-100 roboto-regular border border-ligth-gray/20 text-black rounded-md '> Düzenle</button>
                                     <button onClick={()=> handleDelete(company.menu[0].menu_id, company.company.id, company.company.address_id)} className='w-max py-2 px-16 h-full bg-dark-red/90 roboto-regular rounded-md text-white'> Sil</button>
                                 </div>
                                 
