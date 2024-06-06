@@ -14,7 +14,6 @@ const getDistricts = async (_data)=> {
         
         const response  = await axios.request(config);
 
-        console.log(response.data.data[0].districts);
         
         return (response.data.data[0].districts);
 

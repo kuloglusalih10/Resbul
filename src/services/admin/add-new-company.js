@@ -5,28 +5,8 @@ const addCompany = async  (_data, user_id) => {
 
     try{
 
-        // let data = JSON.stringify({
-        //     "name" : _data['name'],
-        //     "logo" : _data['logo'],
-        //     "capacity": _data['capacity'],
-        //     "selfService": _data['selfService'] ? 1 : 0,
-        //     "wifi": _data['selfService'] ? 1 : 0,
-        //     "liveMusic": _data['liveMusic'] ? 1 : 0,
-        //     "alcohol": _data['alcohol'] ? 1 : 0,
-        //     "balcony": _data['balcony'] ? 1 : 0,
-        //     "city": _data['city'],
-        //     "district": _data['district'],
-        //     "adressDesc": _data['adressDesc'],
-        //     "menu": _data['menu'],
-        //     "gallery": _data['gallery'],
-        //     "user_id" : user_id
-
-        // });
 
         const formData = new FormData();
-
-
-        console.log(_data['gallery']);
 
         formData.append('user_id', user_id);
         formData.append('name', _data['name']);

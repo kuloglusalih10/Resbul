@@ -3,10 +3,10 @@ import { Outlet } from 'react-router-dom'
 import Navbar from "./companents/Navbar"
 const index = () => {
   return (
-    <div className='bg-main w-full h-full'>
+    <div className='bg-main w-full h-full overflow-scroll pb-8'>
         
         <Navbar/>
-        <div className='xl:px-[200px] px-[10px] w-full flex-1'>
+        <div className='xl:px-[200px] px-[10px] w-full flex-1 '>
           <Outlet/>
         </div>
 

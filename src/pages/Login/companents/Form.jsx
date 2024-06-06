@@ -13,7 +13,8 @@ import axios from 'axios';
 import login from '../../../services/auth/login';
 import resetPassword from '../../../services/auth/reset-password';
 import {ScaleLoader} from "react-spinners";
-import { setLogin, setUser } from '../../../stores/auth/actions';
+import { setToken } from '../../../stores/auth/actions';
+import { isExpired, decodeToken } from "react-jwt";
 
 const Form =  ({isAdmin}) => {
 
@@ -25,6 +26,7 @@ const Form =  ({isAdmin}) => {
 
     const navigate = useNavigate();
     
+    
     const handleResetPass = async () => {
 
         if(validateEmail(resetMail)){
@@ -33,8 +35,6 @@ const Form =  ({isAdmin}) => {
             setopenModal(false);
 
             const result = await resetPassword(resetMail);
-
-            console.log(result);
 
             if(result.res){
                 toast(result.message,{'type': 'success'})
@@ -48,6 +48,8 @@ const Form =  ({isAdmin}) => {
             setMailMessage(true);
         }
     }
+
+
 
     const handleGoogleLogin = useGoogleLogin({
 
@@ -78,10 +80,13 @@ const Form =  ({isAdmin}) => {
                     
                     if(_res.res){
 
-                        setLogin(true);
-                        setUser(_res.data);
-                        toast(_res.message,{type: 'success'});
-                        {isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
+                        
+                        setToken(result.data.token);
+                        const myToken = decodeToken(result.data.token);
+                    
+
+                        toast(result.message,{type: 'success'});
+                        {myToken.isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
                     }
                     else {
                         toast(_res.message,{type: 'error'});
@@ -118,16 +123,18 @@ const Form =  ({isAdmin}) => {
             const result = await login(values);
             
             setLoader(false);
-            console.log(result);
+
 
             if(result.res){
 
-                setLogin(true);
-                console.log('normal giriş  set user data : ', result.data);
-                setUser(result.data);
+
+                setToken(result.data.token);
+                const myToken = decodeToken(result.data.token);
+               
 
                 toast(result.message,{type: 'success'});
-                {isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
+                {myToken.isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
+
             }
             else {
                 toast(result.message,{type: 'error'});

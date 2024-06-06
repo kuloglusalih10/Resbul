@@ -17,15 +17,19 @@ import { MdOutlineAddPhotoAlternate } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import addCompany from '../../../services/admin/add-new-company';
-import { useAuth } from '../../../stores/auth/hooks';
 import { toast } from 'react-toastify';
+import { decodeToken } from 'react-jwt';
+import { useNavigate } from 'react-router-dom';
+
 
 const index = () => {
 
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [parent, enableAnimations] = useAutoAnimate();
-    const user = JSON.parse(useAuth());
+    const user_id = decodeToken(localStorage.getItem('token')).user_id;
+    const navigate = useNavigate();
+   
 
     const [menuError, setMenuError] = useState('');
      
@@ -94,13 +98,14 @@ const index = () => {
 
             onSubmit={async (values, actions)=> {
 
-                const result = await addCompany(values, user['id']);
+                const result = await addCompany(values, user_id);
 
                 
 
                 if(result.res){
 
                     toast(result.message, {type : 'success'});
+                    navigate('/admin/');
 
                 }else{
 
@@ -378,10 +383,6 @@ const index = () => {
                                                     <>
 
                                                         <div className='w-full h-[300px] border border-ligth-gray/20 rounded-md flex flex-col items-center overflow-scroll'>
-
-                                                            <div className='w-[40%] h-[20%] mt-4'>
-                                                                <img className='w-full h-full object-contain' src={URL.createObjectURL(values.logo)} alt="" />
-                                                            </div>
 
                                                             {
                                                                 menuError && (<p className='text-red-600 mt-2'>{menuError}</p>)

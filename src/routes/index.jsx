@@ -7,10 +7,13 @@ import NotFound from "../pages/NotFound"
 import CustomerLayout from "../layouts/Customer"
 import CustomerHome from "../pages/Customer/Home"
 import AdminLayout from "../layouts/Admin"
-import AdminHome from "../pages/Admin/Home"
 import PrivateRoute from "../companents/PrivateRoute"
 import AdminProfile from "../pages/Admin/Profile"
 import Add from "../pages/Admin/Add";
+import AdminList from "../pages/Admin/List"
+import AdminControl from "../companents/AdminControl"
+import CustomerControl from "../companents/CustomerControl"
+import Detail from "../pages/Admin/Detail"
 
 const routes = createBrowserRouter([
     {
@@ -35,7 +38,9 @@ const routes = createBrowserRouter([
                 path: '/customer',
                 element: (
                     <PrivateRoute>
-                        <CustomerLayout/>
+                        <CustomerControl>
+                            <CustomerLayout/>
+                        </CustomerControl>
                     </PrivateRoute>
                 ),
                 children: [
@@ -49,22 +54,30 @@ const routes = createBrowserRouter([
                 path: '/admin',
                 element:(
                     <PrivateRoute>
-                        <AdminLayout/>
+                        <AdminControl>
+                            <AdminLayout/>
+                        </AdminControl>
                     </PrivateRoute>
                 ),
                 children: [
                     {
                         index: true,
-                        element : <AdminHome/>,
+                        element : <AdminList/>,
                     },
                     {
                         path: '/admin/profile',
                         element: <AdminProfile/>
+                                   
                     },
                     {
                         path: '/admin/add',
                         element: <Add/>
+                    },
+                    {
+                        path: '/admin/:id',
+                        element: <Detail/>
                     }
+                    
                 ]
             },
             {

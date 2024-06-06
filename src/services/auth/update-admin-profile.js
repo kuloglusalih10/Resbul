@@ -15,6 +15,7 @@ const updateAdminProfile = async  (_data) => {
         formData.append('background', _data['background']);
 
 
+
         let config = {
             method: 'POST',
             url: `${import.meta.env.VITE_API_URL}/update-admin-profile.php`,

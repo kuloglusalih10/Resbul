@@ -15,6 +15,7 @@ const register = async  (_data) => {
             "isGoogle" : _data['isGoogle']
         });
 
+
         let config = {
             method: 'post',
             url: `${import.meta.env.VITE_API_URL}/register.php`,

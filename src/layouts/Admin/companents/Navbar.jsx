@@ -4,13 +4,15 @@ import { memo } from 'react'
 import { ADMİN_NAVBAR } from '../../../utils/consts/navbar'
 
 const Navbar = () => {
+
+    
   return (
     <div className='w-full h-[8%]  flex items-center justify-between bg-white border-b py-3 px-16'>
-        <div className='w-[10%] h-full'>
+        <a href='/admin/' className='w-[10%] h-full'>
 
             <img src={logo} alt="Resbul logo" className='w-full h-full object-contain'/>
 
-        </div>
+        </a>
         <div className='h-full w-min py-1 flex flex-row items-center justify-end'>
             <div className='w-max h-full flex items-center flex-row justify-center'>
                 {

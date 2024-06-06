@@ -8,7 +8,7 @@ import Form from './companents/Form'
 
 const index = () => {
 
-    const [type, setType] = useState("customer");
+    const [type, setType] = useState("customer"); // Tab geçişleri için
     
 
     return (

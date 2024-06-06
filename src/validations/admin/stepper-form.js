@@ -10,7 +10,7 @@ export const stepperValidation = Yup.object().shape({
         then: schema => schema.required()
     }),
 
-    description : Yup.string().max(200, 'Açıklama alanı en fazla 200 karakter olabilir').min(15, 'Açıklama alanı en az 15 karakter olmalı').when('step', {
+    description : Yup.string().max(400, 'Açıklama alanı en fazla 200 karakter olabilir').min(15, 'Açıklama alanı en az 15 karakter olmalı').when('step', {
         is: 1,
         then: schema => schema.required()
     }),
@@ -103,7 +103,7 @@ export const stepperValidation = Yup.object().shape({
         Yup.mixed().test('fileFormat', 'Geçersiz dosya uzantısı', value => {
 
             if (value) {
-                const supportedFormats = ["png","PNG","jpg", "JPEG", "JPG", "jpeg"];
+                const supportedFormats = ["jpg", "JPEG", "JPG", "jpeg"];
                 return supportedFormats.includes(value.name.split('.').pop());
             }
             return true;
