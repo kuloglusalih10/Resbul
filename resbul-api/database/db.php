@@ -7,7 +7,7 @@
        private $host = "localhost";
        private $user = "root";
        private $password = "";
-       private $dbName = "deneme";
+       private $dbName = "resbul";
 
        protected function connect(){
         try {
@@ -22,7 +22,7 @@
             
          } catch (PDOException $e) {
 
-            echo createResponse(false, "Veritabanı bağlantı hatası");
+            echo createResponse(false, $e->getMessage());
             exit;
             
          }
