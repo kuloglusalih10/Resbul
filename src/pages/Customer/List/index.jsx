@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import getCompanies from '../../../services/admin/get-companies'
 import { toast } from 'react-toastify';
-import { decodeToken } from 'react-jwt';
 import { CiLocationOn } from "react-icons/ci";
 import { FaWifi } from "react-icons/fa6";
 import { GiTabletopPlayers } from "react-icons/gi";
@@ -10,7 +8,8 @@ import { IoMdBeer } from "react-icons/io";
 import { LuMusic } from "react-icons/lu";
 import Lottie from 'lottie-react';
 import empty from "../../../assets/empty.json"
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import getCompaniesByCity from '../../../services/customer/get-companies-byCity';
 
 
 const index = () => {
@@ -18,9 +17,9 @@ const index = () => {
     
     
     const [companies, setCompanies] = useState([]);
-    const user_id = decodeToken(localStorage.getItem('token')).user_id;
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
+    const {city} = useParams();
 
 
     const navigate = useNavigate();
@@ -32,7 +31,7 @@ const index = () => {
             setIsLoading(true);
             setIsError(false);
 
-            const result = await getCompanies(user_id);
+            const result = await getCompaniesByCity(city);
 
             if(result.res){
 
@@ -50,6 +49,8 @@ const index = () => {
         _getCompanies();
 
     },[]);
+
+
 
     return (
         <div className='w-full h-full px-8 md:px-52 pt-24 flex flex-col items-center justify-center'>
@@ -83,7 +84,7 @@ const index = () => {
 
                                 companies.map((item)=>{
                                     return (
-                                        <div onClick={()=> navigate(`/admin/${item.id}`) } className='w-full cursor-pointer p-3 h-[200px] mb-5 bg-white border border-ligth-gray/20 rounded-md flex flex-row items-center'>
+                                        <div onClick={()=> navigate(`/customer/${city}/${item.id}`) } className='w-full cursor-pointer p-3 h-[200px] mb-5 bg-white border border-ligth-gray/20 rounded-md flex flex-row items-center'>
 
                                             <div className='h-full bg-main p-2 rounded-md w-1/4'>
 
@@ -131,7 +132,7 @@ const index = () => {
                             <div className='w-1/2 h-1/3 flex flex-col items-center justify-center'>
         
                                 <Lottie animationData={empty}/>
-                                <h2 className='text-[21px] roboto-semibold mt-8 text-dark-gray/80'> Henüz bir işletme eklemediniz </h2>
+                                <h2 className='text-[21px] roboto-semibold mt-8 text-dark-gray/80'> Bu bölgeye ait kayıtlı işletme bulunamadı</h2>
                             </div>
 
 

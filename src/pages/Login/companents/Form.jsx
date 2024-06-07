@@ -74,26 +74,29 @@ const Form =  ({isAdmin}) => {
                     'isGoogle' : 1
                 };
 
-                login(loginUser).then((_res)=>{
+                login(loginUser).then((result)=>{
 
                     setLoader(false);
                     
-                    if(_res.res){
 
-                        
+                    if(result.res){
+
+
                         setToken(result.data.token);
                         const myToken = decodeToken(result.data.token);
                     
 
                         toast(result.message,{type: 'success'});
                         {myToken.isAdmin == 0 ? navigate('/customer') : navigate('/admin')}
+
                     }
                     else {
-                        toast(_res.message,{type: 'error'});
+                        toast(result.message,{type: 'error'});
                     }
-                }).catch((err)=> toast(err.message, {type:  'error'}));
+                        }).catch((err)=> toast(err.message, {type:  'error'}));
 
-            })
+                    })
+                    
             .catch((err) => {
                 setLoader(false);
                 toast(err.message, {type: 'error'})

@@ -20,6 +20,7 @@ import addCompany from '../../../services/admin/add-new-company';
 import { toast } from 'react-toastify';
 import { decodeToken } from 'react-jwt';
 import { useNavigate } from 'react-router-dom';
+import resLogo from "../../../assets/soft-logo.png"
 
 
 const index = () => {
@@ -52,7 +53,16 @@ const index = () => {
 
 
   return (
-    <div className='flex items-start justify-center pt-28'>
+    <div className='flex flex-col items-center justify-center pt-12'>
+
+
+        <div className='w-full flex items-center mb-8 justify-center'>
+
+            <div className='w-[80px] h-[80px] '>
+                <img src={resLogo} className='w-full h-full object-cover' alt="" />
+            </div>
+
+        </div>
 
         
 

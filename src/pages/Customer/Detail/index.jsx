@@ -154,11 +154,11 @@ const index = () => {
                                                 <img className='w-full h-full object-fit bg-main rounded-md' src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+company.company.logo} alt="İşletme logo" />
 
                                             </div>
-                                            <div className='mx-6 pt-1 flex flex-1 min-h-[200px] flex-col justify-between items-start'>
+                                            <div className='mx-6 pt-1 flex  flex-1 min-h-[200px] flex-col justify-between items-start'>
 
-                                                <div className=''>
+                                                <div className='w-full'>
 
-                                                    <div className='flex w-full bg-balac flex-row items-center justify-between'>
+                                                    <div className='flex w-full bg-white flex-row items-center justify-between'>
                                                         <h2 className=' text-xl roboto-regular gap-x-3 flex items-center justify-start'>
                                                             {company.company.name}<span className='text-xs flex items-center gap-x-1 text-ligth-gray'><IoIosPeople size={16}/>{company.company.capacity}</span>
                                                         </h2>
@@ -380,15 +380,6 @@ const index = () => {
                                         
                                     </TabPanel>
                                 </Tabs>
-
-                                <div className='w-full flex items-center justify-end gap-x-4 mt-4'>
-
-                                    <button onClick={()=> navigate('edit')} className='w-max py-2 px-16 h-full bg-zinc-100 roboto-regular border border-ligth-gray/20 text-black rounded-md '> Düzenle</button>
-                                    <button onClick={()=> handleDelete(company.menu[0].menu_id, company.company.id, company.company.address_id)} className='w-max py-2 px-16 h-full bg-dark-red/90 roboto-regular rounded-md text-white'> Sil</button>
-                                </div>
-                                
-
-
                                 
                             </div>
 

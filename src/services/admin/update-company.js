@@ -26,7 +26,7 @@ const updateCompany = async  (_data, user_id,address_id,company_id,menu_id) => {
         formData.append('company_id', company_id);
         formData.append('menu_id', menu_id);
 
-
+        console.log(_data);
         
 
         if(_data['gallery'] == null){

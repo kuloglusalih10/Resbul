@@ -32,6 +32,7 @@
     "react-spinners": "^0.13.8",
     "react-tabs": "^6.0.2",
     "react-toastify": "^10.0.5",
+    "turkey-map-react": "^1.2.1",
     "turkey-neighbourhoods": "^3.0.12",
     "use-file-picker": "^2.1.2",
     "yup": "^1.4.0"

@@ -16,6 +16,7 @@ import { htmlToText } from 'html-to-text';
 import updateAdminProfile from "../../../services/auth/update-admin-profile";
 import { decodeToken, isExpired } from 'react-jwt';
 import getUserById from '../../../services/auth/get-user-byId';
+import { setToken } from '../../../stores/auth/actions';
 
 
 const index = () => {
@@ -37,7 +38,7 @@ const index = () => {
     const [background, setBackground] = useState(null);
     const [displayProfile, setDisplayProfile] = useState(null);
     const [displayBack, setDisplayBack] = useState(null);
-    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [token, _setToken] = useState(localStorage.getItem('token'));
     const decodedToken = decodeToken(token);
     
 
@@ -122,17 +123,19 @@ const index = () => {
         
         const result = await updateAdminProfile(values);
 
+        console.log(result);
         
         if(result.res){
+            setToken(result.data.token);
             toast(result.message,{'type': 'success'})
         }
-        else{
-            toast(result.message,{'type': 'error'});
-            if(!result.isLogged){
-                navigate('/login');
-                setLogout();
-            }
-        }
+         else{
+             toast(result.message,{'type': 'error'});
+             if(!result.isLogged){
+                 navigate('/login');
+                 setLogout();
+             }
+         }
     }
 
     const handleResetPass = async (resetMail) => {
@@ -221,9 +224,9 @@ const index = () => {
     
                         <div className='w-full rounded-lg h-2/5 relative'>
     
-                            <button onClick={()=>{document.getElementById('background_input').click();}}  className='p-2 rounded-full absolute bottom-4 right-4 flex items-center justify-center bg-dark-orange'>
+                            <button onClick={()=>{document.getElementById('background_input').click();}}  className='p-2  absolute bottom-4 right-4 flex items-center justify-center'>
     
-                                <FaEdit size={15} className='' color='#fff'/>
+                                <FaEdit size={19} className='' color='#FC6F20'/>
                                 <input id='background_input' className='hidden'  type="file"  onChange={onBackgroundChange} />
     
                             </button>
@@ -235,8 +238,8 @@ const index = () => {
                             <div className='w-[30%] h-[207px] flex flex-col items-end justify-center relative'>
     
                                
-                               <button onClick={()=>{document.getElementById('profil_input').click();}} className='absolute z-50 top-24 left-[75%] rounded-full bg-dark-orange p-2'>
-                                    <FaEdit className='' color='#fff'/>
+                               <button onClick={()=>{document.getElementById('profil_input').click();}} className='absolute z-50 top-[50%] left-[78%] rounded-fullp-2'>
+                                    <FaEdit className='' color='#FC6F20'/>
                                     <input className='hidden' id='profil_input'  type="file" onChange={onProfileChange}/>
                                </button>
                                     
@@ -273,18 +276,18 @@ const index = () => {
     
                     </div>
     
-                    <div className=' w-[30%] h-[345px] rounded-md bg-white border py-4 flex flex-col  gap-y-3 border-ligth-gray/20'>
+                    <div className='shadow shadow-dark-blue/30 w-[30%] h-[345px] rounded-md bg-white border py-4 flex flex-col  gap-y-3 border-ligth-gray/20'>
     
                         <div className='w-full h-1/5 flex flex-row items-start justify-between'>
     
-                            <div className='px-2 py-1 w-full h-full rounded-md'>
+                            <div className='px-2 py-1.5 w-full h-full rounded-md'>
                                 <div className='w-full  relative border rounded-md border-ligth-gray/40  h-full flex flex-row items-center '>
-                                    <div className='p-2.5 rounded-full  absolute right-4 flex items-center justify-center bg-ligth-red/40'>
+                                    <div className='w-[20%] h-full border-r border-ligth-gray/20  absolute left-0 flex items-center justify-center bg-ligth-gray/20'>
     
-                                        <FaIdCard size={15} className='' color='#FD0F0F'/>
-    
+                                        <FaIdCard size={21} className='' color='#000'/>
+
                                     </div>
-                                    <input onChange={(e)=> setName(e.target.value)} className='w-full focus:border-dark-blue h-full outline-none px-4 pr-[20%] text-[14px] rounded-md' type="text" value={name}/>
+                                    <input onChange={(e)=> setName(e.target.value)} className='w-full focus:border-dark-blue h-full outline-none px-4 pl-[23%] text-[14px] rounded-md' type="text" value={name}/>
     
                                 </div>
                             </div>
@@ -292,15 +295,15 @@ const index = () => {
                         </div>
                         <div className='w-full h-1/5 flex  flex-row items-start justify-between'>
     
-                            <div className='px-2 py-1 w-full h-full rounded-md'>
+                            <div className='px-2 py-1.5 w-full h-full rounded-md'>
                                 <div className='w-full relative border rounded-md border-ligth-gray/40  h-full flex flex-row items-center '>
     
-                                    <div className='p-2.5 rounded-full  absolute right-4 flex items-center justify-center bg-ligth-gray/20'>
+                                    <div className='w-[20%] h-full border-r border-ligth-gray/20  absolute left-0 flex items-center justify-center bg-ligth-gray/20'>
     
-                                        <GiFamilyTree size={15} className='' color='#000'/>
+                                        <GiFamilyTree size={21} className='' color='#000'/>
     
                                     </div>
-                                    <input onChange={(e)=> setSurname(e.target.value)} className='w-full focus:border-dark-blue h-full pr-[20%] outline-none px-4 text-[14px] rounded-md' type="text" value={surname}/>
+                                    <input onChange={(e)=> setSurname(e.target.value)} className='w-full focus:border-dark-blue h-full pl-[23%] outline-none px-4 text-[14px] rounded-md' type="text" value={surname}/>
     
                                 </div>
                             </div>
@@ -308,15 +311,15 @@ const index = () => {
                         </div>
                         <div className='w-full h-1/5 flex flex-row items-start justify-between'>
     
-                            <div className='px-2 py-1 w-full h-full rounded-md'>
+                            <div className='px-2 py-1.5 w-full h-full rounded-md'>
                                 <div className='w-full relative border rounded-md border-ligth-gray/40  h-full flex flex-row items-center '>
     
-                                    <div className='p-2.5 rounded-full  absolute right-4 flex items-center justify-center bg-ligth-green/40'>
+                                    <div className='w-[20%] h-full border-r border-ligth-gray/20  absolute left-0 flex items-center justify-center bg-ligth-gray/20'>
     
-                                        <MdEmail size={15} className='' color='#19D508'/>
+                                        <MdEmail size={21} className='' color='#000'/>
     
                                     </div>
-                                    <input readOnly className='w-full cursor-default pr-[20%] h-full outline-none px-4 text-[14px] rounded-md' type="text" value={email}/>
+                                    <input readOnly className='w-full cursor-default pl-[23%]  h-full outline-none px-4 text-[14px] rounded-md' type="text" value={email}/>
     
                                 </div>
                             </div>
@@ -324,15 +327,15 @@ const index = () => {
                         </div>
                         <div className='w-full h-1/5 flex  flex-row items-start justify-between'>
     
-                            <div className='px-2 py-1 w-full h-full rounded-md'>
+                            <div className='px-2 py-1.5 w-full h-full rounded-md'>
                                 <div className='w-full select-none relative border rounded-md border-ligth-gray/40  h-full flex flex-row items-center '>
     
-                                    <div className='p-2.5 rounded-full  absolute right-4 flex items-center justify-center bg-ligth-purple/40'>
+                                    <div className='w-[20%] h-full border-r border-ligth-gray/20  absolute left-0 flex items-center justify-center bg-ligth-gray/20'>
     
-                                        <FaKey size={15} className='' color='#0025FB'/>
+                                        <FaKey size={20} className='' color='#000'/>
     
                                     </div>
-                                    <input readOnly className='w-full  pr-[20%] h-full outline-none cursor-default select-none px-4 rounded-md' type="password" value={'123456'}/>
+                                    <input readOnly className='w-full  pl-[23%] h-full outline-none cursor-default select-none px-4 rounded-md' type="password" value={'123456'}/>
     
                                 </div>
                             </div>

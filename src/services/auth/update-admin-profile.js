@@ -24,6 +24,7 @@ const updateAdminProfile = async  (_data) => {
         
         
         const response  = await axios.request(config);
+        console.log(response.data);
 
         return (response.data);
 
