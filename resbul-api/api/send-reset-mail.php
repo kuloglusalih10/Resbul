@@ -44,7 +44,12 @@
                         $mail->addAddress($email);
                         $mail->Subject = "Reset Password";
                         $template = file_get_contents("../reset-mail-template.html");
-                        $htmlContent = str_replace('{{reset_token}}', $token, $template);
+                        //$htmlContent = str_replace('{{reset_token}}', $token, $template);
+                        $htmlContent = str_replace(
+                            ['{{reset_token}}', '{{backend_root_directory}}'], 
+                            [$token, $_ENV['BACKEND_ROOT_FOLDER']], 
+                            $template
+                        );
                         $mail->Body = $htmlContent;
     
                         
@@ -65,7 +70,7 @@
     
                     
                 }else{
-                    echo createResponse(false, "Hatalı şifre sıfırlama isteği", []);
+                    echo createResponse(false, "Google ile giriş şifreleri sıfırlanamaz", []);
                 }
     
     

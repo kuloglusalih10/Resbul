@@ -67,7 +67,12 @@
                         $mail->addAddress($email);
                         $mail->Subject = "Account Activation";
                         $template = file_get_contents("../mail-template.html");
-                        $htmlContent = str_replace('{{activation_token}}', $activation_token, $template);
+                        // $htmlContent = str_replace('{{activation_token}}', $activation_token, $template);
+                        $htmlContent = str_replace(
+                            ['{{activation_token}}', '{{backend_root_directory}}'], 
+                            [$activation_token, $_ENV['BACKEND_ROOT_FOLDER']], 
+                            $template
+                        );
                         $mail->Body = $htmlContent;
 
 

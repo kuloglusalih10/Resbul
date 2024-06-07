@@ -6,11 +6,12 @@
         require_once "./libs/functions.php";
         require_once "./database/models/auth.php";
 
+        session_start();
+        
         if($_SERVER['REQUEST_METHOD'] == 'GET') {
 
             $token = $_GET["token"];
 
-            session_start();
 
             $_SESSION['token'] = $token;
 
