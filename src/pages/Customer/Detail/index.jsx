@@ -4,7 +4,7 @@ import getCompanyById from '../../../services/general/get-company-byId';
 import { toast } from 'react-toastify';
 import { decodeToken } from 'react-jwt';
 import { useToken } from '../../../stores/auth/hooks'
-import { Carousel } from "@material-tailwind/react";
+import { Carousel, button } from "@material-tailwind/react";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { IoStorefrontOutline } from "react-icons/io5";
@@ -23,8 +23,16 @@ import { LuSalad } from "react-icons/lu";
 import { FaBuildingCircleArrowRight } from "react-icons/fa6";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
-import deleteCompany from '../../../services/admin/delete-company';
 import { useNavigate } from 'react-router-dom';
+import { MdOutlineComment } from "react-icons/md";
+import { IoTimeSharp } from "react-icons/io5";
+import { timeAgo } from '../../../hooks/date';
+import { FaUserLarge } from "react-icons/fa6";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import addComment from '../../../services/customer/add-comment';
+import { Dialog } from '@material-tailwind/react';
+import {ScaleLoader} from "react-spinners";
+
 
 const index = () => {
 
@@ -33,23 +41,12 @@ const index = () => {
     const user_id = decodeToken(useToken()).user_id;
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const [activeImage, setActiveImage] = useState(false);
+    const [comment, setComment] = useState('');
     const navigate = useNavigate();
-
-
-    const handleDelete = async (menu_id, company_id, address_id) => {
-
-        const result = await  deleteCompany(menu_id ,company_id, address_id);
-
-        if(result.res){
-
-            toast("Silme işlemi başarılı", {type : 'success'});
-            navigate('/admin/');
-        }
-        else{
-            toast(result.message, {type: 'error'});
-        }
-    }
+    const token = localStorage.getItem('token');
+    const [parent, enableAnimations] = useAutoAnimate();
+    const decodedToken = decodeToken(useToken());
+    const [loader, setLoader] = useState(false);
 
 
     useEffect(()=>{
@@ -61,18 +58,21 @@ const index = () => {
             setIsLoading(true);
             setIsError(false);
 
-            const result = await getCompanyById(id);
+            const result = await getCompanyById(id,token);
 
             if(result.res){
-
-                setActiveImage(import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+result.data.gallery[0].image)
                 setCompany(result.data);
-
             }
             else {
 
+
                 setIsError(true);
                 toast(result.message, {type : 'error'});
+
+                if(!result.isLogged){
+                    navigate('/login');
+                    setLogout();
+                }
 
             }
 
@@ -83,10 +83,33 @@ const index = () => {
         getCompany();
 
     },[]);
-    
+
+    const handleAddComment = async (name,surname, profile, comp_id)=> {
+
+        setLoader(true);
+
+        const result = await addComment(name, surname, comp_id, profile, comment);
+
+        setLoader(false);
+
+        if(result.res){   
+
+           
+            toast(result.message,{type: 'success'});
+        }
+        else {
+            toast(result.message,{type: 'error'});
+        }
+    }
 
     return (
+
        <div className='w-full h-max  px-8 md:px-52 pt-16 flex flex-col items-center justify-center'>
+
+            <Dialog style={{background: 'none', display:'flex', alignItems:'center', justifyContent: 'center', outline: 'none', border: 'none', boxShadow: 'none'}} open={loader}>
+                <ScaleLoader className='' color='white'  />
+            </Dialog>
+
             {
                 isLoading ? 
 
@@ -124,7 +147,6 @@ const index = () => {
 
                                             <div key={index} className=''>
                                                 <img
-                                                onClick={() => setActiveImage(import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+item.image)}
                                                 src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+item.image}
                                                 className="h-[380px] w-full  cursor-pointer rounded-lg object-fit"
                                                 alt="gallery-image"
@@ -139,7 +161,8 @@ const index = () => {
                                     <TabList className={"w-full flex bg-white border rounded-t-md  border-ligth-gray/20 "}>
                                         <Tab  selectedClassName='bg-dark-blue text-white rounded-tl-md' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><IoStorefrontOutline size={23}/> Genel</Tab>
                                         <Tab selectedClassName='bg-dark-blue text-white ' className="w-full outline-none cursor-pointer py-3 flex items-center gap-x-4 justify-center "><GrContactInfo size={23}/> İletişim</Tab>
-                                        <Tab selectedClassName='bg-dark-blue text-white rounded-tr-md' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><BiFoodMenu size={23}/> Menü</Tab>
+                                        <Tab selectedClassName='bg-dark-blue text-white ' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><BiFoodMenu size={23}/> Menü</Tab>
+                                        <Tab selectedClassName='bg-dark-blue text-white rounded-tr-md' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><MdOutlineComment size={23}/> Yorumlar</Tab>
                                         
                                     </TabList>
 
@@ -193,7 +216,7 @@ const index = () => {
                                         </div>
                                     </TabPanel>
 
-                                    <TabPanel  className="w-full bg-white border-x border-b  border-ligth-gray/20 rounded-b-md">
+                                    <TabPanel  className="w-full bg-white border-x  rounded-b-md">
                                         <div  className='w-full cursor-pointer p-3 h-max  bg-white border border-ligth-gray/20 rounded-b-md flex flex-col items-start'>
                                             <div className='flex items-center py-2'>
 
@@ -376,6 +399,79 @@ const index = () => {
                                             </div>
 
 
+                                        </div>
+                                        
+                                    </TabPanel>
+                                    <TabPanel  >
+                                        
+                                        <div  className='min-h-[180px]  rounded-md '>
+
+                                                <div className='w-full h-max mb-4'>
+                                                    <textarea className='resize-none h-[120px] w-full border border-ligth-gray/20 px-3 pt-3 outline-none focus:border-dark-blue rounded-md' value={comment} onChange={(e)=>setComment(e.target.value)} placeholder='Bir yorum yaz...'/>
+                                                </div>
+                                                <div ref={parent} className='flex w-full items-center justify-end mb-4'>
+                                                    {
+                                                        comment !== '' && <button type='button' onClick={()=> handleAddComment(decodedToken.username, decodedToken.surname, decodedToken.profile, company.company.id)} className='bg-dark-orange text-white border border-ligth-gray/20 py-3 rounded-md px-16'>Gönder</button>
+                                                    }
+                                                </div>
+                                                {
+                                                    company.comments.length < 1 ? 
+                                                    
+                                                    <>
+                                                        <div className='flex bg-[#fff] flex-col w-full h-[200px] items-center justify-center'>
+                                                            <h1 className='text-ligth-gray roboto-semibold '>
+                                                                Bu İşletmeye hiç yorum yapılmadı
+                                                            </h1>
+                                                        </div>
+                                                    </>
+
+                                                        :
+
+                                                     <>
+
+                                                        {
+                                                             company.comments.map((item)=>{
+                                                                
+
+                                                                 return (
+
+                                                                    <div className='flex mb-8 items-center border bg-white border-ligth-gray/40 justify-start min-h-[180px] rounded-md'>
+                                                                        <div className='h-[180px] w-1/5 rounded-md '>
+                                                                            <img className='w-full h-full object-content rounded-l-md' src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+item.user_profile} alt="" />
+                                                                        </div>
+                                                                        <div className='flex w-full flex-col min-h-[180px]  items-start justify-start'>
+                                                                            <div className='flex w-full bg-dark-blue/20 border-b border-ligth-gray/20 justify-between rounded-tr-md px-8 py-2 items-center'>
+
+                                                                                <h3 className='roboto-regular gap-x-2.5 flex items-center text-[15px]'>
+
+                                                                                    <FaUserLarge color='#FFBF00'/>
+                                                                                    {item.user_name+"  "+item.user_surname}
+
+                                                                                </h3>
+
+                                                                                <h2 className='flex items-center justify-center gap-x-2'>
+                                                                                    <IoTimeSharp color='#FFBF00'/>
+
+                                                                                    <span className='text-xs'>
+                                                                                        {
+                                                                                            timeAgo(item.date)
+                                                                                        }
+                                                                                    </span>
+                                                                                </h2>
+
+                                                                            </div>
+
+                                                                            <p className='mt-2 px-8 text-ligth-gray'>
+                                                                                {item.content}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                 )
+
+                                                             })
+                                                        }
+                                                     </>
+                                                }
                                         </div>
                                         
                                     </TabPanel>

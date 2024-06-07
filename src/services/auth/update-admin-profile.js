@@ -13,6 +13,8 @@ const updateAdminProfile = async  (_data) => {
         formData.append('profile', _data['profile']);
         formData.append('description', _data['description']);
         formData.append('background', _data['background']);
+        formData.append('token', _data['token']);
+
 
 
 
@@ -24,7 +26,6 @@ const updateAdminProfile = async  (_data) => {
         
         
         const response  = await axios.request(config);
-        console.log(response.data);
 
         return (response.data);
 

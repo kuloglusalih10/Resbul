@@ -1,12 +1,13 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const getCompanyById = async (_data)=> {
+const getCompanyById = async (_data, token)=> {
 
     try{
 
         let data = JSON.stringify({
             "id": _data,
+            "token" : token
         });
 
 

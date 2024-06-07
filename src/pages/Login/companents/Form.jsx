@@ -14,7 +14,7 @@ import login from '../../../services/auth/login';
 import resetPassword from '../../../services/auth/reset-password';
 import {ScaleLoader} from "react-spinners";
 import { setToken } from '../../../stores/auth/actions';
-import { isExpired, decodeToken } from "react-jwt";
+import {  decodeToken } from "react-jwt";
 
 const Form =  ({isAdmin}) => {
 

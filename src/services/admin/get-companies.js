@@ -1,12 +1,13 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const getCompanies = async (_data)=> {
+const getCompanies = async (_data,token)=> {
 
     try{
 
         let data = JSON.stringify({
             "user_id": _data,
+            "token" : token
         });
 
 
@@ -30,7 +31,7 @@ const getCompanies = async (_data)=> {
         
     }
     catch(error){
-        return toast("İşletmeler listelenemedi", {type: 'error'});
+        return toast(error.message, {type: 'error'});
     }
 }
 

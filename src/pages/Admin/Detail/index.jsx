@@ -25,6 +25,13 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import deleteCompany from '../../../services/admin/delete-company';
 import { useNavigate } from 'react-router-dom';
+import { Dialog } from '@material-tailwind/react';
+import {ScaleLoader} from "react-spinners";
+import { MdOutlineComment } from "react-icons/md";
+import { IoTimeSharp } from "react-icons/io5";
+import { timeAgo } from '../../../hooks/date';
+import { FaUserLarge } from "react-icons/fa6";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const index = () => {
 
@@ -33,8 +40,8 @@ const index = () => {
     const user_id = decodeToken(useToken()).user_id;
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
-    const [activeImage, setActiveImage] = useState(false);
     const navigate = useNavigate();
+    const token = localStorage.getItem('token');
 
 
     const handleDelete = async (menu_id, company_id, address_id) => {
@@ -61,18 +68,21 @@ const index = () => {
             setIsLoading(true);
             setIsError(false);
 
-            const result = await getCompanyById(id);
+            const result = await getCompanyById(id,token);
 
             if(result.res){
-
-                setActiveImage(import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+result.data.gallery[0].image)
                 setCompany(result.data);
-
             }
             else {
 
+
                 setIsError(true);
                 toast(result.message, {type : 'error'});
+
+                if(!result.isLogged){
+                    navigate('/login');
+                    setLogout();
+                }
 
             }
 
@@ -124,7 +134,6 @@ const index = () => {
 
                                             <div key={index} className=''>
                                                 <img
-                                                onClick={() => setActiveImage(import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+item.image)}
                                                 src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+item.image}
                                                 className="h-[380px] w-full  cursor-pointer rounded-lg object-fit"
                                                 alt="gallery-image"
@@ -140,6 +149,7 @@ const index = () => {
                                         <Tab  selectedClassName='bg-dark-blue text-white rounded-tl-md' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><IoStorefrontOutline size={23}/> Genel</Tab>
                                         <Tab selectedClassName='bg-dark-blue text-white ' className="w-full outline-none cursor-pointer py-3 flex items-center gap-x-4 justify-center "><GrContactInfo size={23}/> İletişim</Tab>
                                         <Tab selectedClassName='bg-dark-blue text-white rounded-tr-md' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><BiFoodMenu size={23}/> Menü</Tab>
+                                        <Tab selectedClassName='bg-dark-blue text-white rounded-tr-md' className="w-full cursor-pointer outline-none py-3 flex items-center gap-x-4 justify-center "><MdOutlineComment size={23}/> Yorumlar</Tab>
                                         
                                     </TabList>
 
@@ -376,6 +386,72 @@ const index = () => {
                                             </div>
 
 
+                                        </div>
+                                        
+                                    </TabPanel>
+                                    <TabPanel  >
+                                        
+                                        <div  className='min-h-[180px]  rounded-md '>
+
+                                                
+                                                {
+                                                    company.comments.length < 1 ? 
+                                                    
+                                                    <>
+                                                        <div className='flex bg-[#fff] flex-col w-full h-[200px] items-center justify-center'>
+                                                            <h1 className='text-ligth-gray roboto-semibold '>
+                                                                Bu İşletmeye hiç yorum yapılmadı
+                                                            </h1>
+                                                        </div>
+                                                    </>
+
+                                                        :
+
+                                                     <>
+
+                                                        {
+                                                             company.comments.map((item)=>{
+                                                                
+
+                                                                 return (
+
+                                                                    <div className='flex mb-8 items-center border bg-white border-ligth-gray/40 justify-start min-h-[180px] rounded-md'>
+                                                                        <div className='h-[180px] w-1/5 rounded-md '>
+                                                                            <img className='w-full h-full object-content rounded-l-md' src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+item.user_profile} alt="" />
+                                                                        </div>
+                                                                        <div className='flex w-full flex-col min-h-[180px]  items-start justify-start'>
+                                                                            <div className='flex w-full bg-dark-blue/20 border-b border-ligth-gray/20 justify-between rounded-tr-md px-8 py-2 items-center'>
+
+                                                                                <h3 className='roboto-regular gap-x-2.5 flex items-center text-[15px]'>
+
+                                                                                    <FaUserLarge color='#FFBF00'/>
+                                                                                    {item.user_name+"  "+item.user_surname}
+
+                                                                                </h3>
+
+                                                                                <h2 className='flex items-center justify-center gap-x-2'>
+                                                                                    <IoTimeSharp color='#FFBF00'/>
+
+                                                                                    <span className='text-xs'>
+                                                                                        {
+                                                                                            timeAgo(item.date)
+                                                                                        }
+                                                                                    </span>
+                                                                                </h2>
+
+                                                                            </div>
+
+                                                                            <p className='mt-2 px-8 text-ligth-gray'>
+                                                                                {item.content}
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                 )
+
+                                                             })
+                                                        }
+                                                     </>
+                                                }
                                         </div>
                                         
                                     </TabPanel>

@@ -110,8 +110,6 @@ const index = () => {
 
                 const result = await addCompany(values, user_id);
 
-                
-
                 if(result.res){
 
                     toast(result.message, {type : 'success'});

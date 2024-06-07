@@ -17,6 +17,7 @@ import Detail from "../pages/Admin/Detail"
 import EditPage from "../pages/Admin/Edit"
 import CustomerList from "../pages/Customer/List"
 import CustomerDetail from "../pages/Customer/Detail"
+import CustomerProfile from "../pages/Customer/Profile"
 
 const routes = createBrowserRouter([
     {
@@ -59,6 +60,11 @@ const routes = createBrowserRouter([
                     {
                         path: '/customer/:city/:id',
                         element: <CustomerDetail/>
+                    },
+                    {
+                        path: '/customer/profile',
+                        element: <CustomerProfile/>
+                                   
                     },
                 ]
             },

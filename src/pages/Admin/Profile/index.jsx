@@ -117,20 +117,22 @@ const index = () => {
             'surname' : surname,
             'description' : description,
             'profile' : profile,
-            'background' : background
+            'background' : background,
+            'token' : token
         }
 
         
         const result = await updateAdminProfile(values);
-
-        console.log(result);
         
         if(result.res){
+            
             setToken(result.data.token);
             toast(result.message,{'type': 'success'})
         }
          else{
-             toast(result.message,{'type': 'error'});
+
+             toast(result.message,{type: 'error'});
+
              if(!result.isLogged){
                  navigate('/login');
                  setLogout();

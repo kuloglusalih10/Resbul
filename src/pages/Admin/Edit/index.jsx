@@ -33,6 +33,7 @@ const index = () => {
     const [company, setCompany] = useState(null);
     const [menuError, setMenuError] = useState('');
     const [active, setActive] = useState(null);
+    const token = localStorage.getItem('token');
 
 
     useEffect(()=>{
@@ -44,7 +45,7 @@ const index = () => {
             setIsLoading(true);
             setIsError(false);
 
-            const result = await getCompanyById(id);
+            const result = await getCompanyById(id, token);
 
             if(result.res){
 
@@ -100,7 +101,7 @@ const index = () => {
 
                     <>
                         <div className='w-full'>
-                            <h2 className='w-full h-[200px] flex items-center justify-center rounded-md border  border-dark-red bg-ligth-red/40'>
+                            <h2 className='w-full mt-8 h-[200px] flex items-center justify-center rounded-md border  border-dark-red bg-ligth-red/40'>
                                 Bir hata oluştu
                             </h2>
                         </div>

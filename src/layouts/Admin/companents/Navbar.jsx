@@ -45,7 +45,7 @@ const Navbar = () => {
                 <div className='h-full  w-max flex flex-col items-center justify-center'>
                     <a href="/admin/profile" className='flex items-center gap-x-4 rounded-full bg-main pr-6 border border-ligth-gray/20 justify-center'>
                         <div className='h-[45px] w-[45px]  rounded-full '>
-                            <img className='rounded-full w-full h-full object-center ' src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+profile} alt="" />
+                            <img className='rounded-full w-full h-full object-fill ' src={import.meta.env.VITE_BACKEND_URL+"/img/uploads/"+profile} alt="" />
                         </div>
                         <span className='roboto-regular'>
                             {username}

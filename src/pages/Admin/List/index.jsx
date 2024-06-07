@@ -11,6 +11,7 @@ import { LuMusic } from "react-icons/lu";
 import Lottie from 'lottie-react';
 import empty from "../../../assets/empty.json"
 import { useNavigate } from 'react-router-dom';
+import { setLogout } from '../../../stores/auth/actions';
 
 
 const index = () => {
@@ -21,6 +22,7 @@ const index = () => {
     const user_id = decodeToken(localStorage.getItem('token')).user_id;
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
+    const token = localStorage.getItem('token');
 
 
     const navigate = useNavigate();
@@ -32,7 +34,7 @@ const index = () => {
             setIsLoading(true);
             setIsError(false);
 
-            const result = await getCompanies(user_id);
+            const result = await getCompanies(user_id, token);
 
             if(result.res){
 
@@ -40,8 +42,17 @@ const index = () => {
             }
             else{
 
-                setIsError(true);
-                toast(result.message, {type: 'error'});
+                if(!result.isLogged){
+
+                    toast("Önce giriş yapmalısınız", {type: 'error'});
+                    navigate('/login');
+                    setLogout();
+
+                }else{
+
+                    setIsError(true);
+                    toast(result.message, {type: 'error'});
+                }
             }
 
             setIsLoading(false);

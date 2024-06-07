@@ -20,6 +20,7 @@ const index = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const {city} = useParams();
+    const token = localStorage.getItem('token');
 
 
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const index = () => {
             setIsLoading(true);
             setIsError(false);
 
-            const result = await getCompaniesByCity(city);
+            const result = await getCompaniesByCity(city, token);
 
             if(result.res){
 

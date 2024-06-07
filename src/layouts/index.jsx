@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
  const index = () => {
   return (
-    <div className='w-full h-full overflow-scroll  '>
+    <div className='w-full h-full bg-main overflow-scroll  '>
       <ToastContainer/>
       <Outlet/>
     </div>

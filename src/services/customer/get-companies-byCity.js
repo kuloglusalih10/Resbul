@@ -1,12 +1,13 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const getCompaniesByCity = async (_data)=> {
+const getCompaniesByCity = async (_data, token)=> {
 
     try{
 
         let data = JSON.stringify({
             "city": _data,
+            'token' : token
         });
 
 
@@ -24,7 +25,6 @@ const getCompaniesByCity = async (_data)=> {
         
         const response  = await axios.request(config);
         
-        console.log(response);
         return (response.data);
 
         
