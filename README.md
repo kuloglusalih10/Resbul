@@ -8,7 +8,7 @@ Daha sonra uygulama klasörünü `console xampp/htdocs` klasörüne taşıyın.
 
 Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyin.
 
-`JS
+```js
 
 {
 
@@ -29,7 +29,7 @@ Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example 
   JWT_SECRET_KEY="JWT SECRET KEY"
 }
 
-`
+```
 
 
 
