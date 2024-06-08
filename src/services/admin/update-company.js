@@ -1,7 +1,7 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const updateCompany = async  (_data, user_id,address_id,company_id,menu_id) => {
+const updateCompany = async  (_data, user_id,address_id,company_id,menu_id,token) => {
 
     try{
 
@@ -25,8 +25,7 @@ const updateCompany = async  (_data, user_id,address_id,company_id,menu_id) => {
         formData.append('address_id', address_id);
         formData.append('company_id', company_id);
         formData.append('menu_id', menu_id);
-
-        console.log(_data);
+        formData.append('token', token);
         
 
         if(_data['gallery'] == null){

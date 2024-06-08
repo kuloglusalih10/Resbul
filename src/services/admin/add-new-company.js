@@ -1,7 +1,7 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const addCompany = async  (_data, user_id) => {
+const addCompany = async  (_data, user_id,token) => {
 
     try{
 
@@ -22,6 +22,7 @@ const addCompany = async  (_data, user_id) => {
         formData.append('district', _data['district']);
         formData.append('adressDesc', _data['adressDesc']);
         formData.append('menu', JSON.stringify(_data['menu']));
+        formData.append('token', token);
 
         
 

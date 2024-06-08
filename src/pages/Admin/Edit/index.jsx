@@ -18,7 +18,7 @@ import getCompanyById from '../../../services/general/get-company-byId';
 import { MdDelete } from "react-icons/md";
 import updateCompany from '../../../services/admin/update-company';
 import { toast } from 'react-toastify';
-
+import { setLogout } from '../../../stores/auth/actions';
 
 const index = () => {
 
@@ -148,7 +148,7 @@ const index = () => {
 
                                 console.log(values);
 
-                                  const result = await updateCompany(values, user_id, company.company.address_id, company.company.id,company.company.menu_id);
+                                  const result = await updateCompany(values, user_id, company.company.address_id, company.company.id,company.company.menu_id,token);
 
                                 
 
@@ -159,6 +159,10 @@ const index = () => {
                                   }else{
 
                                      toast(result.message, {type : 'error'});
+                                     if(!result.isLogged){
+                                        navigate('/login');
+                                        setLogout();
+                                    }
 
                                   }
 

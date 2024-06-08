@@ -25,13 +25,11 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import { IoIosPeople } from "react-icons/io";
 import deleteCompany from '../../../services/admin/delete-company';
 import { useNavigate } from 'react-router-dom';
-import { Dialog } from '@material-tailwind/react';
-import {ScaleLoader} from "react-spinners";
 import { MdOutlineComment } from "react-icons/md";
 import { IoTimeSharp } from "react-icons/io5";
 import { timeAgo } from '../../../hooks/date';
 import { FaUserLarge } from "react-icons/fa6";
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import {setLogout} from "../../../stores/auth/actions"
 
 const index = () => {
 
@@ -46,7 +44,7 @@ const index = () => {
 
     const handleDelete = async (menu_id, company_id, address_id) => {
 
-        const result = await  deleteCompany(menu_id ,company_id, address_id);
+        const result = await  deleteCompany(menu_id ,company_id, address_id,token);
 
         if(result.res){
 
@@ -398,8 +396,8 @@ const index = () => {
                                                     company.comments.length < 1 ? 
                                                     
                                                     <>
-                                                        <div className='flex bg-[#fff] flex-col w-full h-[200px] items-center justify-center'>
-                                                            <h1 className='text-ligth-gray roboto-semibold '>
+                                                        <div className='flex border rounded-md text-red-600 border-red-600 bg-red-100 flex-col w-full h-[200px] items-center justify-center'>
+                                                            <h1 className=' roboto-semibold '>
                                                                 Bu İşletmeye hiç yorum yapılmadı
                                                             </h1>
                                                         </div>

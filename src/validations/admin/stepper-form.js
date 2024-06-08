@@ -96,7 +96,7 @@ export const stepperValidation = Yup.object().shape({
 
     // step 4
 
-    gallery : Yup.array().when('step', {
+    gallery : Yup.array().max(5).when('step', {
         is: 4,
         then: schema => schema.required('En az 3 fotoğraf eklemelisiniz').min(3)
     }).of(

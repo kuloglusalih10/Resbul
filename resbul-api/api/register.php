@@ -77,7 +77,7 @@
 
 
                         if($mail->send()){
-                            echo createResponse(true,"Kayıt İşlemi Başarılı ", []);
+                            echo createResponse(true,"Mailinizi kontrol edin", []);
                         }
                         else{
 

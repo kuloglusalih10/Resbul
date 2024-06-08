@@ -10,6 +10,7 @@ import Lottie from 'lottie-react';
 import empty from "../../../assets/empty.json"
 import { useNavigate, useParams } from 'react-router-dom';
 import getCompaniesByCity from '../../../services/customer/get-companies-byCity';
+import { setLogout } from '../../../stores/auth/actions';
 
 
 const index = () => {
@@ -42,6 +43,12 @@ const index = () => {
 
                 setIsError(true);
                 toast(result.message, {type: 'error'});
+                if(!result.isLogged){
+
+                    navigate('/login');
+                    setLogout();
+    
+                }
             }
 
             setIsLoading(false);

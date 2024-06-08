@@ -8,12 +8,25 @@
     require_once "../database/db.php";
     require_once "../libs/functions.php";
     require_once "../database/models/admin.php";
+    require_once "../database/models/customer.php";
+    require_once "../database/models/jwt.php";
+
 
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         try{
 
+            $jwt = new JwtManager();
+
+            if(!$jwt -> validateToken($_POST['token'])){
+
+                echo createResponse(false,'Önce giriş yapmalısınız',[],false);
+                exit;
+                
+            }
+
+            // değerler frontta zaten kotrnol ediliyor burda sadece genel bi kontrol sağlandı
             
             if(isset($_POST['name']) && isset($_POST['description']) &&  isset($_POST['user_id']) && isset($_POST['capacity']) && isset($_POST['selfService']) && isset($_POST['wifi']) && isset($_POST['liveMusic']) && isset($_POST['alcohol']) && isset($_POST['balcony']) && isset($_POST['city']) && isset($_POST['district']) && isset($_POST['adressDesc']) && isset($_POST['menu']) && isset($_FILES['gallery']) ){
             
@@ -45,6 +58,7 @@
 
                
                
+                // tekli resim kaydetme
     
                 if(isset($_FILES['logo'])){
     
@@ -66,6 +80,8 @@
 
 
                             
+                // gallery kaydetme tekli resim kaydetmeden farklı olarak bir dizi içerisindeki resimler kayıt ediliyor
+
                 $gallery = save_gallery($gallery);
                 
 

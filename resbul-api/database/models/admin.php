@@ -189,7 +189,11 @@
                 $delete_images_stmt = $pdo -> prepare($sql);
                 $delete_images_stmt -> execute(['company_id' => $company_id]);
 
-                
+
+                $sql = "DELETE FROM comments where company_id = :company_id";
+                $delete_comments_stmt = $pdo -> prepare($sql);
+                $delete_comments_stmt -> execute(['company_id' => $company_id]);
+
 
                 $sql = "DELETE FROM companies where id = :company_id";
                 $delete_company_stmt = $pdo -> prepare($sql);

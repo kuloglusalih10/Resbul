@@ -42,16 +42,14 @@ const index = () => {
             }
             else{
 
+                setIsError(true);
+                toast(result.message, {type: 'error'});
+                
                 if(!result.isLogged){
 
-                    toast("Önce giriş yapmalısınız", {type: 'error'});
                     navigate('/login');
                     setLogout();
 
-                }else{
-
-                    setIsError(true);
-                    toast(result.message, {type: 'error'});
                 }
             }
 

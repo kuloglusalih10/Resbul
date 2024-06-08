@@ -1,7 +1,7 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const addComment = async  (name, surname, company_id, profile, content) => {
+const addComment = async  (name, surname, company_id, profile, content,token) => {
 
     try{
 
@@ -12,6 +12,8 @@ const addComment = async  (name, surname, company_id, profile, content) => {
         formData.append('profile',profile);
         formData.append('company_id', company_id);
         formData.append('content', content);
+        formData.append('token', token);
+
         
 
         let config = {

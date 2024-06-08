@@ -8,6 +8,8 @@ header("Access-Control-Allow-Methods: *");
 require_once "../database/db.php";
 require_once "../libs/functions.php";
 require_once "../database/models/admin.php";
+require_once "../database/models/jwt.php";
+
 
 
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -16,6 +18,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
 
         $data = json_decode(file_get_contents('php://input'), true);
+
+        $jwt = new JwtManager();
+
+        if(!$jwt -> validateToken($data['token'])){
+
+            echo createResponse(false,'Önce giriş yapmalısınız',[],false);
+            exit;
+            
+        }
 
         if(isset($data['company_id']) && !empty($data['company_id']) && isset($data['menu_id']) && !empty($data['menu_id']) && isset($data['address_id']) && !empty($data['address_id'])) {
 

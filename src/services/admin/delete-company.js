@@ -1,7 +1,7 @@
 import axios from "axios";
 import {toast} from "react-toastify"
 
-const deleteCompany = async (menu_id, company_id , addres_id)=> {
+const deleteCompany = async (menu_id, company_id , addres_id,token)=> {
 
     try{
 
@@ -11,6 +11,7 @@ const deleteCompany = async (menu_id, company_id , addres_id)=> {
             "company_id": company_id,
             "menu_id": menu_id,
             "address_id": addres_id,
+            "token": token,
 
         });
 

@@ -1,6 +1,4 @@
 <?php
-
-
     header("Access-Control-Allow-Origin:* ");
     header("Access-Control-Allow-Headers: *");
     header("Access-Control-Allow-Methods: *");
@@ -8,11 +6,22 @@
     require_once "../database/db.php";
     require_once "../libs/functions.php";
     require_once "../database/models/customer.php";
+    require_once "../database/models/jwt.php";
+
 
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         try{
+
+            $jwt = new JwtManager();
+
+            if(!$jwt -> validateToken($_POST['token'])){
+
+                echo createResponse(false,'Önce giriş yapmalısınız',[],false);
+                exit;
+                
+            }
 
             
             if(isset($_POST['company_id'])&& isset($_POST['profile']) && isset($_POST['name']) && isset($_POST['surname'])  && isset($_POST['content']) ){

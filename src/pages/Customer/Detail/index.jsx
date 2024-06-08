@@ -32,6 +32,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import addComment from '../../../services/customer/add-comment';
 import { Dialog } from '@material-tailwind/react';
 import {ScaleLoader} from "react-spinners";
+import { setLogout } from '../../../stores/auth/actions';
 
 
 const index = () => {
@@ -88,7 +89,7 @@ const index = () => {
 
         setLoader(true);
 
-        const result = await addComment(name, surname, comp_id, profile, comment);
+        const result = await addComment(name, surname, comp_id, profile, comment,token);
 
         setLoader(false);
 
@@ -98,7 +99,14 @@ const index = () => {
             toast(result.message,{type: 'success'});
         }
         else {
+            
             toast(result.message,{type: 'error'});
+            if(!result.isLogged){
+
+                navigate('/login');
+                setLogout();
+
+            }
         }
     }
 
@@ -418,8 +426,8 @@ const index = () => {
                                                     company.comments.length < 1 ? 
                                                     
                                                     <>
-                                                        <div className='flex bg-[#fff] flex-col w-full h-[200px] items-center justify-center'>
-                                                            <h1 className='text-ligth-gray roboto-semibold '>
+                                                        <div className='flex border rounded-md text-red-600 border-red-600 bg-red-100 flex-col w-full h-[200px] items-center justify-center'>
+                                                            <h1 className=' roboto-semibold '>
                                                                 Bu İşletmeye hiç yorum yapılmadı
                                                             </h1>
                                                         </div>

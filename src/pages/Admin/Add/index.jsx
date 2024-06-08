@@ -21,6 +21,8 @@ import { toast } from 'react-toastify';
 import { decodeToken } from 'react-jwt';
 import { useNavigate } from 'react-router-dom';
 import resLogo from "../../../assets/soft-logo.png"
+import {setLogout} from "../../../stores/auth/actions"
+
 
 
 const index = () => {
@@ -28,6 +30,7 @@ const index = () => {
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [parent, enableAnimations] = useAutoAnimate();
+    const token = localStorage.getItem('token');
     const user_id = decodeToken(localStorage.getItem('token')).user_id;
     const navigate = useNavigate();
    
@@ -108,7 +111,7 @@ const index = () => {
 
             onSubmit={async (values, actions)=> {
 
-                const result = await addCompany(values, user_id);
+                const result = await addCompany(values, user_id,token);
 
                 if(result.res){
 
@@ -118,6 +121,15 @@ const index = () => {
                 }else{
 
                     toast(result.message, {type : 'error'});
+
+                    if(!result.isLogged){
+
+                        navigate('/login');
+                        setLogout();
+                    }
+                   
+
+                    
 
                 }
 
