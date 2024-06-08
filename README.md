@@ -8,7 +8,7 @@ Daha sonra uygulama klasörünü `console xampp/htdocs` klasörüne taşıyın.
 
 Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyin.
 
-`js
+`JS
 
   // Kök dizin için (React)
   
