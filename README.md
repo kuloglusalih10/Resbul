@@ -29,9 +29,16 @@ Ardından proje kök ve ` /resbul-api` dizinlerinde bulunan .env.example dosyala
   SMTP_USERNAME="SMTP USERNAME"
   SMTP_PASSWORD="SMTP PASSWORD"
   JWT_SECRET_KEY="JWT SECRET KEY"
+
 }
 
 ```
+## Google client id ve password için örnek ekran
+
+<img width="1710" alt="Ekran Resmi 2024-06-07 23 57 02" src="https://github.com/kuloglusalih10/Resbul/assets/101921061/bb3d99d0-e9fd-4dab-9389-9b996f7995fd">
+
+
+
 
 Dosya kurulumlarının ardından prjeyi bir IDE ile açın ve proje kök dizininde şu komutu çalıştırın.
 
