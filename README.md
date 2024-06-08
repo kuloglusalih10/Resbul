@@ -10,6 +10,8 @@ Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example 
 
 `JS
 
+{
+
   // Kök dizin için (React)
   
   VITE_API_URL="BACKENDİNİN APİ KLASÖRÜ YOLU"
@@ -25,7 +27,7 @@ Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example 
   SMTP_USERNAME="SMTP USERNAME"
   SMTP_PASSWORD="SMTP PASSWORD"
   JWT_SECRET_KEY="JWT SECRET KEY"
-
+}
 
 `
 
