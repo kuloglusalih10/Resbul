@@ -1,3 +1,36 @@
+# Proje Kurulumu 
+
+Uygulamayı kendi localinizde çalıştırabilmek için öncelikle projeyi localinizi klonlayın.
+
+`console git clone https://github.com/kuloglusalih10/Resbul.git`
+
+Daha sonra uygulama klasörünü `console xampp/htdocs` klasörüne taşıyın.
+
+Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyin.
+
+`js
+
+  // Kök dizin için (React)
+  
+  VITE_API_URL="BACKENDİNİN APİ KLASÖRÜ YOLU"
+  VITE_GOOGLE_CLIENT_ID="GOOGLE OAUTH CLİENT İD"
+  VITE_GOOGLE_LOGIN_PASSWORD_KEY="GOOGLE OAUTH PASSWORD KEY"
+  VITE_BACKEND_URL="BACKEND KÖK DOSYA DİZİNİ"
+  VITE_CITIES_API = https://turkiyeapi.dev/api/v1/
+  VITE_JWT_SECRET_KEY = "JWT SECRET KEY"
+
+  // ./resbul-api dizini için (php)
+
+  SMTP_HOST='SMTP SERVER HOST'
+  SMTP_USERNAME="SMTP USERNAME"
+  SMTP_PASSWORD="SMTP PASSWORD"
+  JWT_SECRET_KEY="JWT SECRET KEY"
+
+
+`
+
+
+
 # Giriş
 
 Bu rapor, Resbul web uygulamasının geliştirilme sürecini, kullanılan teknolojileri, uygulanan özellikleri ve karşılaşılan zorlukları kapsamaktadır. Bu web uygulaması, kullanıcıların çeşitli hizmetlere kolayca erişebileceği ve yönetebileceği bir platform sağlamaktadır. Uygulama 2 farklı giriş vardır , işletme girişi ile kullanıcı kendi işletmesini ekleyebilir, fotoğraflar ve yazılar ile tanıtımını yapabilir. Müşteri girişi ile de kulllanıcılar eklenen işletmeleri bölgelere göre görüntüleyerek yorumlarda bulunabilir.
