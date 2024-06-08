@@ -8,7 +8,7 @@ Daha sonra uygulama klasörünü ` xampp/htdocs ` klasörüne taşıyın.
 
 Taşıma işleminden sonra phpmyadmin üzerinden ` resbul ` isminde bir veritabanı oluşturun ve proje kök dizininde bulunan ` resbul.sql ` dosyasını içeri aktarın.
 
-Ardından proje kök ve ` /resbul-api ` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyin.
+Ardından proje kök ve ` /resbul-api ` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyip isimlerini ` .env ` olarak değiştirin.
 
 ```js
 
