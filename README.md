@@ -4,11 +4,11 @@ Uygulamayı kendi localinizde çalıştırabilmek için öncelikle projeyi local
 
 `console git clone https://github.com/kuloglusalih10/Resbul.git`
 
-Daha sonra uygulama klasörünü `console xampp/htdocs` klasörüne taşıyın.
+Daha sonra uygulama klasörünü ` xampp/htdocs` klasörüne taşıyın.
 
-Taşıma işleminden sonra proje kök dizininde bulunann `console resbul.sql ` dosyasını phpmyadmin üzerinden içeri aktarın.
+Taşıma işleminden sonra proje kök dizininde bulunann ` resbul.sql ` dosyasını phpmyadmin üzerinden içeri aktarın.
 
-Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyin.
+Ardından proje kök ve ` /resbul-api` dizinlerinde bulunan .env.example dosyalarını kendi ortam değişkenlerinize göre düzenleyin.
 
 ```js
 
@@ -35,11 +35,11 @@ Ardından proje kök ve `console /resbul-api` dizinlerinde bulunan .env.example 
 
 Dosya kurulumlarının ardından prjeyi bir IDE ile açın ve proje kök dizininde şu komutu çalıştırın.
 
-`console npm install`
+` npm install`
 
 Paket kurulumlarının ardından run komutu ile artık kullanmaya hazırsınız 🎉
 
-`console npm run dev`
+` npm run dev`
 
 
 
